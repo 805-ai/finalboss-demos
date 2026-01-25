@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFTERBYTES - Kickstarter Preview</title>
+    <style>
+        /* System font stack - no external calls */
+        @font-face {
+            font-family: 'SystemSans';
+            src: local('Montserrat'), local('Arial Black'), local('Helvetica Neue'), local('Helvetica'), local('Arial'), local('sans-serif');
+            font-weight: 400;
+        }
+        @font-face {
+            font-family: 'SystemSans';
+            src: local('Montserrat'), local('Arial Black'), local('Helvetica Neue Bold'), local('Helvetica'), local('Arial'), local('sans-serif');
+            font-weight: 700;
+        }
+        @font-face {
+            font-family: 'SystemSans';
+            src: local('Montserrat'), local('Arial Black'), local('Impact'), local('Helvetica Neue Bold'), local('Helvetica'), local('Arial'), local('sans-serif');
+            font-weight: 900;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body { 
+            font-family: 'SystemSans', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; 
+            background: #000; 
+            color: #fff; 
+            overflow: hidden; 
+        }
+
+        .video-container { 
+            width: 100vw; 
+            height: 100vh; 
+            position: relative; 
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); 
+        }
+
+        .scene { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            opacity: 0; 
+            transition: opacity 1s; 
+        }
+
+        .scene.active { opacity: 1; }
+
+        /* Scene 1 - The Question */
+        .scene-1 { background: radial-gradient(#1a1510 0%, #000 100%); }
+        .scene-1 .question { 
+            font-size: 3vw; 
+            text-align: center; 
+            line-height: 1.6; 
+            color: #d4af37; 
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.3); 
+            animation: fadeInUp 2s ease forwards; 
+        }
+
+        /* Scene 2 - The Problem */
+        .scene-2 { background: #0a0a0a; }
+        .scene-2 .problem-text { 
+            font-size: 2.5vw; 
+            text-align: center; 
+            color: #888; 
+            max-width: 80%; 
+            line-height: 1.8; 
+        }
+        .scene-2 .highlight { color: #fff; font-weight: 700; }
+
+        /* Scene 3 - The Reveal */
+        .scene-3 { background: #000; }
+        .logo { 
+            font-size: 8vw; 
+            font-weight: 900; 
+            letter-spacing: 0.3em; 
+            background: linear-gradient(135deg, #d4af37 0%, #f4e4ba 50%, #d4af37 100%); 
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent; 
+            animation: logoReveal 2s ease forwards; 
+            filter: drop-shadow(0 0 60px rgba(212, 175, 55, 0.5));
+        }
+        .tagline { 
+            font-size: 2vw; 
+            letter-spacing: 0.5em; 
+            color: #666; 
+            margin-top: 2vh; 
+            animation: fadeIn 2s ease 1s forwards; 
+            opacity: 0; 
+        }
+
+        /* Scene 4 - Features */
+        .scene-4 { background: linear-gradient(#0a0a0a 0%, #151515 100%); }
+        .features-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 4vw; 
+            max-width: 80%; 
+        }
+        .feature-card { 
+            background: rgba(212, 175, 55, 0.05); 
+            border: 1px solid rgba(212, 175, 55, 0.2); 
+            padding: 3vw; 
+            border-radius: 1vw; 
+            animation: cardSlide 0.8s ease forwards; 
+            opacity: 0; 
+            transform: translateY(50px); 
+        }
+        .feature-card:nth-child(1) { animation-delay: 0.2s; }
+        .feature-card:nth-child(2) { animation-delay: 0.4s; }
+        .feature-card:nth-child(3) { animation-delay: 0.6s; }
+        .feature-card:nth-child(4) { animation-delay: 0.8s; }
+        .feature-card h3 { color: #d4af37; font-size: 1.5vw; margin-bottom: 1vh; font-weight: 900; }
+        .feature-card p { color: #888; font-size: 1vw; }
+
+        /* Scene 5 - The Offer */
+        .scene-5 { background: radial-gradient(#1a1510 0%, #000 100%); }
+        .offer-box { text-align: center; animation: pulse 2s ease infinite; }
+        .spots { font-size: 6vw; font-weight: 900; color: #d4af37; }
+        .price { font-size: 3vw; color: #fff; margin: 2vh 0; font-weight: 700; }
+        .forever { font-size: 1.5vw; color: #888; letter-spacing: 0.3em; }
+
+        /* Scene 6 - The Close */
+        .scene-6 { background: #000; }
+        .final-message { text-align: center; }
+        .die-right { 
+            font-size: 10vw; 
+            font-weight: 900; 
+            background: linear-gradient(135deg, #d4af37 0%, #f4e4ba 50%, #d4af37 100%); 
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent; 
+            animation: breathe 3s ease infinite; 
+        }
+        .sub-message { font-size: 1.5vw; color: #666; margin-top: 3vh; letter-spacing: 0.2em; }
+        .cta-button { 
+            margin-top: 5vh; 
+            padding: 2vh 4vw; 
+            background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%); 
+            border: none; 
+            border-radius: 0.5vw; 
+            font-size: 1.5vw; 
+            font-weight: 700; 
+            color: #000; 
+            cursor: pointer; 
+            animation: glow 2s ease infinite;
+            font-family: inherit;
+        }
+
+        /* Particles */
+        .particles { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            pointer-events: none; 
+            overflow: hidden; 
+        }
+        .particle { 
+            position: absolute; 
+            width: 4px; 
+            height: 4px; 
+            background: #d4af37; 
+            border-radius: 50%; 
+            opacity: 0.3; 
+            animation: float 10s ease infinite; 
+        }
+
+        /* Progress Bar */
+        .progress-bar { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            height: 4px; 
+            background: linear-gradient(90deg, #d4af37, #f4e4ba); 
+            width: 0%; 
+            transition: width 0.1s linear; 
+        }
+
+        /* Controls */
+        .controls { 
+            position: fixed; 
+            bottom: 20px; 
+            right: 20px; 
+            display: flex; 
+            gap: 10px; 
+            z-index: 1000; 
+        }
+        .controls button { 
+            padding: 10px 20px; 
+            background: rgba(212, 175, 55, 0.2); 
+            border: 1px solid #d4af37; 
+            color: #d4af37; 
+            cursor: pointer; 
+            font-family: inherit; 
+            font-weight: 700; 
+            transition: all 0.3s;
+        }
+        .controls button:hover { 
+            background: #d4af37; 
+            color: #000; 
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes logoReveal {
+            0% { opacity: 0; transform: scale(0.8); filter: blur(20px); }
+            100% { opacity: 1; transform: scale(1); filter: blur(0); }
+        }
+
+        @keyframes cardSlide {
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(212, 175, 55, 0.8); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- PATENTS PENDING WATERMARK -->
+    <div style="position: fixed; top: 20px; left: 20px; z-index: 999; font-size: 13px; font-family: monospace; letter-spacing: 0.15em; color: #ff0000; text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000; font-weight: bold;">
+        ⚠️ PATENTS PENDING
+    </div>
+    <div style="position: fixed; top: 20px; right: 20px; z-index: 999; font-size: 11px; font-family: monospace; letter-spacing: 0.1em; color: #d4af37; text-shadow: 0 0 5px rgba(212,175,55,0.5);">
+        U.S. App. 19/240,581 • 19/437,072
+    </div>
+    <div style="position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); z-index: 999; font-size: 10px; font-family: monospace; letter-spacing: 0.2em; color: #ff0000; text-shadow: 0 0 10px #ff0000; text-align: center; background: rgba(0,0,0,0.7); padding: 8px 16px; border: 1px solid #ff0000;">
+        ⚠️ PATENTS PENDING • U.S. APP. 19/240,581 & 19/437,072 ⚠️
+    </div>
+
+    <div class="video-container">
+        <div class="particles" id="particles"></div>
+
+        <!-- Scene 1: The Question -->
+        <div class="scene scene-1" data-duration="5000">
+            <div class="question">
+                What happens to your story<br>
+                <span style="font-weight: 900">when you're gone?</span>
+            </div>
+        </div>
+
+        <!-- Scene 2: The Problem -->
+        <div class="scene scene-2" data-duration="6000">
+            <div class="problem-text">
+                Every day, thousands of lives end.<br><br>
+                Their photos... <span class="highlight">scattered across hard drives.</span><br>
+                Their voices... <span class="highlight">forgotten.</span><br>
+                Their stories... <span class="highlight">lost to time.</span><br><br>
+                <em>Your life deserves better than a Google Drive link.</em>
+            </div>
+        </div>
+
+        <!-- Scene 3: The Reveal -->
+        <div class="scene scene-3 active" data-duration="5000">
+            <div class="logo">AFTERBYTES</div>
+            <div class="tagline">THE FINAL TRAILER</div>
+        </div>
+
+        <!-- Scene 4: Features -->
+        <div class="scene scene-4" data-duration="8000">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>THE VAULT</h3>
+                    <p>Unlimited encrypted storage. Military-grade security. Your legacy, protected forever.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>ETERNAL VOICE</h3>
+                    <p>AI voice cloning. Say goodbye in YOUR voice. Even after you're gone.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>HOLLYWOOD STUDIO</h3>
+                    <p>Professional editing tools. Cinematic templates. Studio-quality output.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>MOBILE COMMAND</h3>
+                    <p>iOS + Android. Capture moments anywhere. One-tap uploads.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 5: The Offer -->
+        <div class="scene scene-5" data-duration="6000">
+            <div class="offer-box">
+                <div class="spots">483</div>
+                <div style="font-size: 1.5vw; color: #888; letter-spacing: 0.3em;">LIFETIME SPOTS</div>
+                <div class="price">$200 - ONE TIME - FOREVER</div>
+                <div class="forever">EVERY FEATURE. EVERY UPDATE. FOR LIFE.</div>
+            </div>
+        </div>
+
+        <!-- Scene 6: The Close -->
+        <div class="scene scene-6" data-duration="8000">
+            <div class="final-message">
+                <div class="die-right">DIE RIGHT.</div>
+                <div class="sub-message">YOUR STORY DESERVES A TRAILER</div>
+                <button class="cta-button">BACK THIS PROJECT</button>
+            </div>
+        </div>
+
+        <div class="progress-bar" id="progress"></div>
+    </div>
+
+    <div class="controls">
+        <button id="restartBtn">RESTART</button>
+        <button id="pauseBtn">PAUSE</button>
+    </div>
+
+    <script>
+        (function() {
+            // Generate particles
+            var particlesContainer = document.getElementById('particles');
+            for (var i = 0; i < 30; i++) {
+                var particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                particle.style.animationDuration = (8 + Math.random() * 6) + 's';
+                particlesContainer.appendChild(particle);
+            }
+
+            // Scene management
+            var scenes = document.querySelectorAll('.scene');
+            var progressBar = document.getElementById('progress');
+            var currentScene = 0;
+            var isPaused = false;
+            var sceneTimeout;
+
+            function showScene(index) {
+                for (var i = 0; i < scenes.length; i++) {
+                    scenes[i].classList.remove('active');
+                }
+                if (index < scenes.length) {
+                    scenes[index].classList.add('active');
+                    var duration = parseInt(scenes[index].getAttribute('data-duration'));
+                    
+                    // Progress bar
+                    progressBar.style.transition = 'none';
+                    progressBar.style.width = '0%';
+                    setTimeout(function() {
+                        progressBar.style.transition = 'width ' + duration + 'ms linear';
+                        progressBar.style.width = '100%';
+                    }, 10);
+
+                    if (!isPaused) {
+                        clearTimeout(sceneTimeout);
+                        sceneTimeout = setTimeout(function() {
+                            currentScene++;
+                            if (currentScene < scenes.length) {
+                                showScene(currentScene);
+                            } else {
+                                currentScene = 0;
+                                showScene(0);
+                            }
+                        }, duration);
+                    }
+                }
+            }
+
+            // Controls
+            document.getElementById('restartBtn').addEventListener('click', function() {
+                clearTimeout(sceneTimeout);
+                currentScene = 0;
+                isPaused = false;
+                document.getElementById('pauseBtn').textContent = 'PAUSE';
+                showScene(0);
+            });
+
+            document.getElementById('pauseBtn').addEventListener('click', function() {
+                isPaused = !isPaused;
+                document.getElementById('pauseBtn').textContent = isPaused ? 'PLAY' : 'PAUSE';
+                if (!isPaused) {
+                    showScene(currentScene);
+                } else {
+                    clearTimeout(sceneTimeout);
+                }
+            });
+
+            // Start
+            showScene(0);
+        })();
+    </script>
+</body>
+</html>

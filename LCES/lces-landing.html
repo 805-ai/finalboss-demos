@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LCES - Likeness Consent & Enforcement System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #000; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        
+        .cyber-glow {
+            text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 40px #00d4ff;
+        }
+        
+        .neon-border {
+            border: 1px solid #00d4ff;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3), inset 0 0 20px rgba(0, 212, 255, 0.1);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #00d4ff 0%, #00ff88 50%, #00d4ff 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero-card {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotateX(2deg); }
+            50% { transform: translateY(-10px) rotateX(0deg); }
+        }
+        
+        .pulse-ring {
+            animation: pulse-ring 2s ease-out infinite;
+        }
+        
+        @keyframes pulse-ring {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+        
+        .scan-line {
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.4), transparent);
+            animation: scan 3s linear infinite;
+        }
+        
+        @keyframes scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-cyan-700 selection:text-white">
+
+    <!-- PATENTS PENDING WATERMARK -->
+    <div style="position: fixed; top: 20px; left: 20px; z-index: 999; font-size: 13px; font-family: monospace; letter-spacing: 0.15em; color: #ff0000; text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000; font-weight: bold;">
+        ⚠️ PATENTS PENDING
+    </div>
+    <div style="position: fixed; top: 20px; right: 20px; z-index: 999; font-size: 11px; font-family: monospace; letter-spacing: 0.1em; color: #00d4ff; text-shadow: 0 0 5px rgba(0,212,255,0.5);">
+        FINAL BOSS TECHNOLOGY INC.
+    </div>
+
+    <!-- HERO SECTION -->
+    <header class="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-4 overflow-hidden">
+        
+        <!-- ANIMATED BACKGROUND -->
+        <div class="absolute inset-0 bg-gradient-to-b from-cyan-900/20 via-transparent to-black"></div>
+        <div class="absolute inset-0 bg-black/80"></div>
+        
+        <!-- GRID PATTERN -->
+        <div class="absolute inset-0 opacity-10" style="background-image: linear-gradient(rgba(0,212,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,255,0.3) 1px, transparent 1px); background-size: 50px 50px;"></div>
+        
+        <!-- HERO CARD -->
+        <div class="perspective-1000 relative z-10 flex items-center justify-center mb-12">
+            <div class="hero-card relative max-w-2xl w-full p-12 bg-neutral-950/90 backdrop-blur-xl neon-border rounded-sm shadow-2xl">
+                
+                <!-- SCAN LINE -->
+                <div class="absolute top-0 left-0 right-0 h-1 overflow-hidden">
+                    <div class="scan-line w-full h-full"></div>
+                </div>
+                
+                <div class="mono text-cyan-400 text-sm mb-4 tracking-widest">LIKENESS CONSENT & ENFORCEMENT SYSTEM</div>
+                <h1 class="text-6xl md:text-7xl font-black text-white mb-4 tracking-tight">LCES</h1>
+                <p class="text-neutral-400 text-xl mb-8">The infrastructure layer for ethical AI voice & likeness.</p>
+                
+                <!-- STATS -->
+                <div class="grid grid-cols-3 gap-4 mb-8">
+                    <div class="text-center p-4 bg-black/50 rounded">
+                        <div class="text-3xl font-bold gradient-text">100%</div>
+                        <div class="text-xs text-neutral-500 mt-1">Consent Verified</div>
+                    </div>
+                    <div class="text-center p-4 bg-black/50 rounded">
+                        <div class="text-3xl font-bold gradient-text">&lt;50ms</div>
+                        <div class="text-xs text-neutral-500 mt-1">Verification Speed</div>
+                    </div>
+                    <div class="text-center p-4 bg-black/50 rounded">
+                        <div class="text-3xl font-bold gradient-text">∞</div>
+                        <div class="text-xs text-neutral-500 mt-1">Audit Trail</div>
+                    </div>
+                </div>
+                
+                <a href="#demo" class="inline-block px-8 py-4 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold text-sm tracking-wider hover:opacity-90 transition-all">
+                    SEE THE DEMO
+                </a>
+            </div>
+        </div>
+        
+        <!-- SCROLL INDICATOR -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 text-neutral-600 text-sm mono animate-bounce">
+            ↓ SCROLL
+        </div>
+    </header>
+
+    <!-- THE PROBLEM -->
+    <section class="py-24 px-4 bg-black border-t border-neutral-900">
+        <div class="max-w-4xl mx-auto">
+            <div class="mono text-red-500 text-sm mb-4 tracking-widest">⚠️ THE PROBLEM</div>
+            <h2 class="text-4xl font-bold text-white mb-8">AI Voice Cloning Is Exploding.<br><span class="text-red-500">Consent Infrastructure Doesn't Exist.</span></h2>
+            
+            <div class="grid md:grid-cols-2 gap-8 mt-12">
+                <div class="p-6 bg-neutral-950 border border-red-900/30 rounded">
+                    <div class="text-4xl mb-4">🎭</div>
+                    <h3 class="text-xl font-bold text-white mb-2">Deepfakes Are Everywhere</h3>
+                    <p class="text-neutral-400">Anyone can clone a voice in seconds. Celebrities, politicians, your customers — all vulnerable.</p>
+                </div>
+                <div class="p-6 bg-neutral-950 border border-red-900/30 rounded">
+                    <div class="text-4xl mb-4">⚖️</div>
+                    <h3 class="text-xl font-bold text-white mb-2">Lawsuits Are Coming</h3>
+                    <p class="text-neutral-400">SAG-AFTRA, FTC, state laws — regulation is inevitable. Companies without consent proof will be liable.</p>
+                </div>
+                <div class="p-6 bg-neutral-950 border border-red-900/30 rounded">
+                    <div class="text-4xl mb-4">🔓</div>
+                    <h3 class="text-xl font-bold text-white mb-2">No Verification Standard</h3>
+                    <p class="text-neutral-400">How do you prove consent was given? How do you revoke it? There's no industry standard.</p>
+                </div>
+                <div class="p-6 bg-neutral-950 border border-red-900/30 rounded">
+                    <div class="text-4xl mb-4">💰</div>
+                    <h3 class="text-xl font-bold text-white mb-2">Trust = Revenue</h3>
+                    <p class="text-neutral-400">Enterprise clients won't adopt AI voice without compliance guarantees. You're leaving money on the table.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- THE SOLUTION -->
+    <section class="py-24 px-4 bg-gradient-to-b from-black to-neutral-950 border-t border-neutral-900">
+        <div class="max-w-4xl mx-auto">
+            <div class="mono text-cyan-400 text-sm mb-4 tracking-widest">✓ THE SOLUTION</div>
+            <h2 class="text-4xl font-bold text-white mb-8">LCES: Consent-as-Infrastructure</h2>
+            <p class="text-xl text-neutral-400 mb-12">A blockchain-anchored system that proves consent, tracks usage, detects violations, and provides immutable audit trails.</p>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="p-6 bg-black neon-border rounded text-center">
+                    <div class="text-5xl mb-4">🔐</div>
+                    <h3 class="text-lg font-bold text-white mb-2">Consent Registry</h3>
+                    <p class="text-sm text-neutral-400">Cryptographically signed consent records. Who, what, when, how long.</p>
+                </div>
+                <div class="p-6 bg-black neon-border rounded text-center">
+                    <div class="text-5xl mb-4">🔍</div>
+                    <h3 class="text-lg font-bold text-white mb-2">Deepfake Detection</h3>
+                    <p class="text-sm text-neutral-400">Real-time scanning. Flag unauthorized usage before it spreads.</p>
+                </div>
+                <div class="p-6 bg-black neon-border rounded text-center">
+                    <div class="text-5xl mb-4">📜</div>
+                    <h3 class="text-lg font-bold text-white mb-2">Audit Trail</h3>
+                    <p class="text-sm text-neutral-400">Immutable logs. Prove compliance to regulators, courts, anyone.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY YOU NEED IT -->
+    <section class="py-24 px-4 bg-black border-t border-neutral-900">
+        <div class="max-w-4xl mx-auto">
+            <div class="mono text-emerald-400 text-sm mb-4 tracking-widest">💡 WHY YOU NEED IT</div>
+            <h2 class="text-4xl font-bold text-white mb-12">If You're in AI Voice, You Need LCES</h2>
+            
+            <div class="space-y-6">
+                <div class="flex gap-6 p-6 bg-neutral-950 border border-neutral-800 rounded">
+                    <div class="text-4xl">🎙️</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">Voice Cloning Platforms</h3>
+                        <p class="text-neutral-400">ElevenLabs, Resemble, PlayHT — you're cloning voices. Do you have proof of consent for every single one? LCES gives you that.</p>
+                    </div>
+                </div>
+                <div class="flex gap-6 p-6 bg-neutral-950 border border-neutral-800 rounded">
+                    <div class="text-4xl">🎬</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">Hollywood Studios</h3>
+                        <p class="text-neutral-400">SAG-AFTRA is watching. Digital doubles, de-aging, posthumous performances — all require verifiable consent. LCES is your compliance layer.</p>
+                    </div>
+                </div>
+                <div class="flex gap-6 p-6 bg-neutral-950 border border-neutral-800 rounded">
+                    <div class="text-4xl">🏢</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">Enterprise AI</h3>
+                        <p class="text-neutral-400">Fortune 500 won't touch AI voice without compliance guarantees. LCES makes you enterprise-ready.</p>
+                    </div>
+                </div>
+                <div class="flex gap-6 p-6 bg-neutral-950 border border-neutral-800 rounded">
+                    <div class="text-4xl">🛡️</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">Identity Verification</h3>
+                        <p class="text-neutral-400">Jumio, Onfido, Clear — voice biometrics need consent infrastructure. LCES plugs right in.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INTERACTIVE DEMO -->
+    <section id="demo" class="py-24 px-4 bg-gradient-to-b from-neutral-950 to-black border-t border-cyan-900/30">
+        <div class="max-w-5xl mx-auto">
+            <div class="mono text-cyan-400 text-sm mb-4 tracking-widest text-center">🎮 INTERACTIVE DEMO</div>
+            <h2 class="text-3xl font-bold text-white mb-8 text-center">See LCES In Action</h2>
+            
+            <!-- EMBEDDED DEMO -->
+            <div class="relative w-full overflow-hidden neon-border bg-black rounded" style="height: 600px;">
+                <iframe 
+                    src="lces-demo.html" 
+                    class="w-full h-full border-0"
+                    allow="autoplay"
+                ></iframe>
+            </div>
+            
+            <div class="mt-4 text-xs text-neutral-500 mono text-center">
+                Arrow keys to navigate • Spacebar to pause/play
+            </div>
+        </div>
+    </section>
+
+    <!-- TECHNICAL SPECS -->
+    <section class="py-24 px-4 bg-black border-t border-neutral-900">
+        <div class="max-w-4xl mx-auto">
+            <div class="mono text-cyan-400 text-sm mb-4 tracking-widest">⚙️ TECHNICAL</div>
+            <h2 class="text-4xl font-bold text-white mb-12">Built for Scale. Built for Compliance.</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="text-emerald-400">✓</span>
+                        <span class="text-white">Blockchain-anchored consent records</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-emerald-400">✓</span>
+                        <span class="text-white">Smart contract enforcement</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-emerald-400">✓</span>
+                        <span class="text-white">Real-time deepfake detection</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-emerald-400">✓</span>
+                        <span class="text-white">Sub-50ms verification latency</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-emerald-400">✓</span>
+                        <span class="text-white">REST API + SDK (JS, Python, Go)</span>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="text-emerald-400">✓</span>
+                        <span class="text-white">GDPR / CCPA compliant</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-emerald-400">✓</span>
+                        <span class="text-white">SOC 2 Type II ready</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-emerald-400">✓</span>
+                        <span class="text-white">Immutable audit logs</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-emerald-400">✓</span>
+                        <span class="text-white">Revocation support</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-emerald-400">✓</span>
+                        <span class="text-white">Enterprise SLA available</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-24 px-4 bg-gradient-to-b from-black to-cyan-950/20 border-t border-cyan-900/30">
+        <div class="max-w-2xl mx-auto text-center">
+            <h2 class="text-5xl font-black text-white mb-6">Ready to Be Compliant?</h2>
+            <p class="text-xl text-neutral-400 mb-8">Don't wait for the lawsuit. Get ahead of regulation.</p>
+            
+            <a href="#" class="inline-block px-12 py-5 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold text-lg tracking-wider hover:opacity-90 transition-all">
+                REQUEST ACCESS
+            </a>
+            
+            <div class="mt-8 mono text-sm text-red-500" style="text-shadow: 0 0 10px rgba(255,0,0,0.5);">
+                ⚠️ PATENTS PENDING • FINAL BOSS TECHNOLOGY INC.
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-8 px-4 bg-black border-t border-neutral-900">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div class="mono text-sm text-neutral-600">© 2026 Final Boss Technology Inc.</div>
+            <div class="mono text-sm text-red-500">⚠️ PATENTS PENDING</div>
+        </div>
+    </footer>
+
+</body>
+</html>

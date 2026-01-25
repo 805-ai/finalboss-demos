@@ -1,0 +1,416 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFTERBYTES | Die Right</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #e5e5e5;
+        }
+        h1, h2, h3, .cinematic-text {
+            font-family: 'Cinzel', serif;
+        }
+        .progress-bar-glow {
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.5);
+        }
+        .locked-item {
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
+        .unlocked-item {
+            border: 1px solid #dc2626;
+        }
+        .patent-badge {
+            border: 1px solid #404040;
+            background: rgba(38, 38, 38, 0.5);
+            backdrop-filter: blur(10px);
+        }
+        .btn-glow:hover {
+            box-shadow: 0 0 30px rgba(220, 38, 38, 0.4), 0 0 60px rgba(220, 38, 38, 0.2);
+        }
+        
+        /* ANIMATED HERO KEYFRAMES */
+        @keyframes float {
+            0%, 100% { transform: rotateY(-6deg) rotateX(4deg) translateY(0); }
+            50% { transform: rotateY(-6deg) rotateX(4deg) translateY(-20px); }
+        }
+        @keyframes breathe {
+            0%, 100% { box-shadow: 0 0 40px rgba(220,38,38,0.4); }
+            50% { box-shadow: 0 0 80px rgba(220,38,38,0.8); }
+        }
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .hero-card {
+            transform: rotateY(-6deg) rotateX(4deg);
+            animation: float 20s infinite ease-in-out, breathe 12s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-red-700 selection:text-white">
+
+    <!-- HERO SECTION WITH ANIMATED 3D CARD -->
+    <header class="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-4 overflow-hidden">
+        
+        <!-- ANIMATED BACKGROUND -->
+        <div class="absolute inset-0 bg-gradient-to-b from-red-900/20 via-transparent to-black animate-pulse"></div>
+        <div class="absolute inset-0 bg-black/80"></div>
+        
+        <!-- 3D FLOATING CARD -->
+        <div class="perspective-1000 relative z-10 flex items-center justify-center mb-12">
+            <div class="hero-card relative max-w-lg w-full p-12 bg-neutral-950/90 backdrop-blur-xl border border-red-900/30 rounded-sm shadow-2xl transform-gpu">
+                <h1 class="cinematic-text text-5xl md:text-6xl font-bold text-white mb-4 uppercase tracking-wider">AFTERBYTES</h1>
+                <p class="text-neutral-400 text-lg mb-6">Your Final Trailer. Not Your Tombstone.</p>
+                <p class="text-xs font-mono tracking-wider uppercase" style="color: #39ff14; text-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14, 0 0 30px #39ff14;">Patents Pending â€¢ U.S. App. 19/240,581 â€¢ 19/437,072</p>
+            </div>
+        </div>
+
+        <!-- CTA SECTION BELOW CARD -->
+        <div class="relative z-10 max-w-2xl mx-auto">
+            <p class="text-red-600 tracking-[0.3em] font-bold text-sm mb-6 uppercase animate-pulse">Private Preview: <span data-bind="launchCountdown">30 Days Remaining</span></p>
+            
+            <p class="text-lg md:text-xl text-neutral-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+                Most products help you live better. <strong class="text-white">Afterbytes helps you leave better.</strong> A platform for creating a cinematic final trailer of your life â€” a short, powerful artifact that defines how you are remembered. Not a slideshow. Not a eulogy. <span class="text-red-500">A trailer.</span>
+            </p>
+            
+            <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
+    <!-- SCARCITY BUTTON -->
+    <a id="ctaBack" href="#" class="btn-glow bg-red-700 hover:bg-red-800 text-white font-bold py-4 px-8 rounded-sm uppercase tracking-wider transition-all transform hover:scale-105 shadow-lg shadow-red-900/20">
+        Request Access<span class="text-red-300 text-sm ml-1">(Only <span data-bind="accessRemaining">483</span> access left)</span>
+    </a>
+    <a href="#trailer" class="border border-neutral-600 hover:border-red-600 text-neutral-300 hover:text-white font-medium py-4 px-8 rounded-sm uppercase tracking-wider transition-all">
+        Watch the Trailer
+    </a>
+</div>
+<p class="mt-4 text-xs text-neutral-500 font-mono">
+    Planned pricing after launch: <span class="text-neutral-300 font-semibold">$100/year</span> for standard vault access (bring your own content). Founder pricing is limited.
+</p>
+        </div>
+
+        <!-- PROGRESS INDICATOR -->
+        <div class="relative z-10 w-full max-w-xl mt-16 mb-8">
+    <div class="flex justify-between text-xs font-mono text-neutral-500 mb-2 uppercase">
+        <span>Raised: <span data-bind="raisedDisplay">$3,400</span></span>
+        <span>Goal: <span data-bind="goalDisplay">$100,000</span></span>
+    </div>
+    <div class="w-full bg-neutral-800 h-2 rounded-full overflow-hidden">
+        <div id="progressBar" class="bg-red-600 h-full progress-bar-glow" style="width: 3.4%;"></div>
+    </div>
+    <p class="text-xs text-center mt-4 text-neutral-400 font-mono">
+        <span data-bind="partnerCount">17</span> Early partners engaged.
+    </p>
+</div>
+    
+</header>
+
+    <!-- TRAILER -->
+    <section id="trailer" class="py-20 px-4 bg-black border-t border-neutral-900">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-2xl md:text-3xl font-bold text-white mb-4 cinematic-text uppercase tracking-wider">Watch the Trailer</h2>
+            <p class="text-neutral-400 mb-8">
+                This is the 30-second pitch. The vault is the foundation. The cinematic studio scales after.
+            </p>
+
+            <div class="relative w-full overflow-hidden border border-red-900/30 bg-neutral-950/80 backdrop-blur-xl shadow-2xl" style="padding-top: 56.25%;">
+  <video id="trailerVideo" class="absolute inset-0 w-full h-full" src="../DEMO/AFTERBYTES_DEMO.mp4" controls playsinline></video>
+</div>
+
+            <div class="mt-6 flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+                <div class="text-xs text-neutral-500 font-mono">
+                    
+                </div>
+                <a href="#" id="ctaBack2" class="btn-glow bg-red-700 hover:bg-red-800 text-white font-bold py-3 px-6 rounded-sm uppercase tracking-wider transition-all shadow-lg shadow-red-900/20">
+                    Join the Preview
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- THE PITCH -->
+    <section class="py-24 px-4 bg-neutral-900 border-t border-neutral-800">
+        <div class="max-w-3xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-8 cinematic-text border-l-4 border-red-600 pl-6">
+                We aren't selling burial insurance. <br>We're selling the highlights reel.
+            </h2>
+            <div class="prose prose-invert prose-lg text-neutral-400">
+                <p>
+                    You don't need a demo to know you're going to die. You need a plan for how you'll be remembered when the lights go out. 
+                </p>
+                <p>
+                    <strong class="text-white">Afterbytes</strong> is the studio for your final act.
+                </p>
+                <p>
+                    Early partners engaged.
+                </p>
+                <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                    <div class="bg-neutral-950/50 border border-neutral-800 p-6">
+                        <h3 class="text-white font-bold mb-2 uppercase tracking-widest">Vault V1 (what this funds)</h3>
+                        <ul class="list-disc pl-5 text-neutral-400 space-y-2">
+                            <li>Bring-your-own media: upload your video/audio/letter.</li>
+                            <li>Successor controls: designate who can authorize release.</li>
+                            <li>Release workflow: a deliberate, controlled handoff.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-neutral-950/50 border border-neutral-800 p-6">
+                        <h3 class="text-white font-bold mb-2 uppercase tracking-widest">Studio Mode (what scales next)</h3>
+                        <ul class="list-disc pl-5 text-neutral-400 space-y-2">
+                            <li>Templates and cinematic styles (choose your tone).</li>
+                            <li>Guided structure (beats, pacing, reveal).</li>
+                            <li>Designer-tailored builds (premium, limited slots).</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="mt-8 text-xs text-neutral-500 font-mono">
+                    Pricing intent: founders lock a $200 lifetime tier; standard vault access is planned at $100/year after launch.
+                </p>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- STRETCH GOAL LADDER -->
+
+    <section class="py-24 px-4 bg-black">
+        <div class="max-w-4xl mx-auto">
+            <h3 class="text-center text-2xl font-bold text-white mb-4 uppercase tracking-widest">Build Ladder</h3>
+
+            <p class="text-center text-neutral-400 text-sm mb-12">
+                Vault first. Cinematic studio upgrades unlock as funding increases.
+            </p>
+
+            <!-- FOMO LINE -->
+            <p class="text-center text-red-500 text-sm font-bold mb-12 uppercase tracking-wide">
+                <i class="fas fa-fire mr-2"></i>First <span data-bind="firstCustomLimit">50</span> partners get their custom trailer hand-crafted by the founder.
+            </p>
+
+            <div class="space-y-6">
+                <!-- MILESTONE: $25K -->
+                <div class="milestone-item bg-neutral-900 p-6 rounded-sm border border-neutral-800 relative" data-milestone="25000">
+                    <div class="milestone-tag absolute top-0 right-0 bg-neutral-700 text-neutral-300 text-xs font-bold px-2 py-1 uppercase flex items-center gap-2">
+                        <i class="fas fa-lock text-xs"></i><span>Locked ($25K)</span>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="text-neutral-600 text-2xl mt-1"><i class="fas fa-server"></i></div>
+                        <div>
+                            <h4 class="text-neutral-300 font-bold mb-1 uppercase tracking-widest">The Vault</h4>
+                            <p class="text-neutral-500 text-sm">Secure storage + successor-controlled release workflow (Vault V1).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MILESTONE: $50K -->
+                <div class="milestone-item bg-neutral-900 p-6 rounded-sm border border-neutral-800 relative" data-milestone="50000">
+                    <div class="milestone-tag absolute top-0 right-0 bg-neutral-700 text-neutral-300 text-xs font-bold px-2 py-1 uppercase flex items-center gap-2">
+                        <i class="fas fa-lock text-xs"></i><span>Locked ($50K)</span>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="text-neutral-600 text-2xl mt-1"><i class="fas fa-mobile-alt"></i></div>
+                        <div>
+                            <h4 class="text-neutral-300 font-bold mb-1 uppercase tracking-widest">Mobile Command</h4>
+                            <p class="text-neutral-500 text-sm">iOS & Android apps for vault management and approvals.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MILESTONE: $75K -->
+                <div class="milestone-item bg-neutral-900 p-6 rounded-sm border border-neutral-800 relative" data-milestone="75000">
+                    <div class="milestone-tag absolute top-0 right-0 bg-neutral-700 text-neutral-300 text-xs font-bold px-2 py-1 uppercase flex items-center gap-2">
+                        <i class="fas fa-lock text-xs"></i><span>Locked ($75K)</span>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="text-neutral-600 text-2xl mt-1"><i class="fas fa-microphone-lines"></i></div>
+                        <div>
+                            <h4 class="text-neutral-300 font-bold mb-1 uppercase tracking-widest">Eternal Voice</h4>
+                            <p class="text-neutral-500 text-sm">Voice capture/cloning feature set (subject to policy and safety constraints).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MILESTONE: $100K -->
+                <div class="milestone-item bg-neutral-900 p-6 rounded-sm border border-neutral-800 relative" data-milestone="100000">
+                    <div class="milestone-tag absolute top-0 right-0 bg-neutral-700 text-neutral-300 text-xs font-bold px-2 py-1 uppercase flex items-center gap-2">
+                        <i class="fas fa-lock text-xs"></i><span>Locked ($100K)</span>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="text-neutral-600 text-2xl mt-1"><i class="fas fa-film"></i></div>
+                        <div>
+                            <h4 class="text-neutral-300 font-bold mb-1 uppercase tracking-widest">The Hollywood Studio</h4>
+                            <p class="text-neutral-500 text-sm">Templates + advanced cinematic tooling for â€œfinal trailerâ€ creation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="mt-10 text-xs text-neutral-600 font-mono text-center">
+                Milestone status updates automatically from the â€œRaisedâ€ amount shown above.
+            </p>
+        </div>
+    </section>
+
+<!-- FOOTER -->
+    <footer class="py-12 bg-neutral-950 text-center border-t border-neutral-900">
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-white mb-2 cinematic-text">AFTERBYTES</h2>
+            <p class="text-2xl font-bold uppercase tracking-widest mb-4" style="color: #ff073a; text-shadow: 0 0 10px #ff073a, 0 0 20px #ff073a, 0 0 40px #ff073a;">Die Right.</p>
+        </div>
+        <!-- FLOATING TAGLINE CARD -->
+        <div class="perspective-1000 flex items-center justify-center mb-8">
+            <div class="relative px-8 py-6 bg-neutral-950/90 backdrop-blur-xl border border-red-900/30 rounded-sm shadow-2xl transform-gpu" style="transform: rotateY(3deg) rotateX(-2deg); animation: float 15s infinite ease-in-out, breathe 10s infinite ease-in-out;">
+                <p class="text-white text-lg font-medium tracking-wide">
+                    Don't leave on autopilot. Leave <span style="color: #ff073a; text-shadow: 0 0 10px #ff073a, 0 0 20px #ff073a;">on fire.</span>
+                </p>
+            </div>
+        </div>
+        <div class="flex justify-center gap-6 text-neutral-400">
+            <a href="#" class="hover:text-white transition-colors"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="hover:text-white transition-colors"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="hover:text-white transition-colors"><i class="fab fa-youtube"></i></a>
+        </div>
+        <p class="text-neutral-800 text-xs mt-12 font-mono">
+            &copy; 2026 AFTERBYTES LEGACY SYSTEMS. ALL RIGHTS RESERVED.
+        </p>
+    </footer>
+
+    <!-- PAGE CONFIG / BINDINGS -->
+    <script>
+        // Configure these values before deploying.
+        const AFTERBYTES_CONFIG = {
+            previewUrl: "",            // e.g., "https://www.preview.com/projects/..."
+            trailerEmbedUrl: "",           // e.g., "https://www.youtube.com/embed/VIDEO_ID"
+            launchDateISO: "",             // e.g., "2026-02-03T09:00:00-08:00" (optional)
+
+            raisedUSD: 3400,
+            goalUSD: 100000,
+
+            foundersCap: 500,
+            foundersCommitted: 17,
+
+            firstCustomLimit: 50
+        };
+
+        function formatUSD(n) {
+            try {
+                return n.toLocaleString(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+            } catch {
+                return "$" + String(n);
+            }
+        }
+
+        function setAll(bindName, value) {
+            document.querySelectorAll(`[data-bind="${bindName}"]`).forEach(el => { el.textContent = value; });
+        }
+
+        function updateCountdown() {
+            const target = AFTERBYTES_CONFIG.launchDateISO ? new Date(AFTERBYTES_CONFIG.launchDateISO) : null;
+            if (!target || Number.isNaN(target.getTime())) return; // leave default text in place
+
+            const now = new Date();
+            const ms = target.getTime() - now.getTime();
+            const days = Math.max(0, Math.ceil(ms / (1000 * 60 * 60 * 24)));
+
+            setAll("launchCountdown", `${days} Days Remaining`);
+        }
+
+        function updateFunding() {
+            setAll("raisedDisplay", formatUSD(AFTERBYTES_CONFIG.raisedUSD));
+            setAll("goalDisplay", formatUSD(AFTERBYTES_CONFIG.goalUSD));
+
+            setAll("partnerCount", String(AFTERBYTES_CONFIG.foundersCommitted));
+
+            const remaining = Math.max(0, AFTERBYTES_CONFIG.foundersCap - AFTERBYTES_CONFIG.foundersCommitted);
+            setAll("accessRemaining", String(remaining));
+
+            setAll("firstCustomLimit", String(AFTERBYTES_CONFIG.firstCustomLimit));
+
+            const pct = AFTERBYTES_CONFIG.goalUSD > 0 ? Math.min(100, (AFTERBYTES_CONFIG.raisedUSD / AFTERBYTES_CONFIG.goalUSD) * 100) : 0;
+            const bar = document.getElementById("progressBar");
+            if (bar) bar.style.width = pct.toFixed(1) + "%";
+        }
+
+        function updateMilestones() {
+            const raised = AFTERBYTES_CONFIG.raisedUSD;
+
+            document.querySelectorAll(".milestone-item").forEach(item => {
+                const amt = Number(item.getAttribute("data-milestone") || "0");
+                const unlocked = raised >= amt;
+
+                const tag = item.querySelector(".milestone-tag");
+                if (tag) {
+                    tag.innerHTML = unlocked
+                        ? '<i class="fas fa-check text-xs"></i><span>Unlocked (' + formatUSD(amt) + ')</span>'
+                        : '<i class="fas fa-lock text-xs"></i><span>Locked (' + formatUSD(amt) + ')</span>';
+                    tag.className = unlocked
+                        ? "milestone-tag absolute top-0 right-0 bg-red-600 text-white text-xs font-bold px-2 py-1 uppercase flex items-center gap-2"
+                        : "milestone-tag absolute top-0 right-0 bg-neutral-700 text-neutral-300 text-xs font-bold px-2 py-1 uppercase flex items-center gap-2";
+                }
+
+                item.classList.toggle("locked-item", !unlocked);
+                if (unlocked) {
+                    item.classList.remove("border-neutral-800");
+                    item.classList.add("border-red-600");
+                } else {
+                    item.classList.remove("border-red-600");
+                    item.classList.add("border-neutral-800");
+                }
+
+                const icon = item.querySelector("i");
+                if (icon) {
+                    const iconWrap = icon.parentElement;
+                    if (iconWrap) {
+                        iconWrap.classList.toggle("text-red-600", unlocked);
+                        iconWrap.classList.toggle("text-neutral-600", !unlocked);
+                    }
+                }
+
+                const title = item.querySelector("h4");
+                if (title) {
+                    title.classList.toggle("text-white", unlocked);
+                    title.classList.toggle("text-neutral-300", !unlocked);
+                }
+
+                const desc = item.querySelector("p");
+                if (desc) {
+                    desc.classList.toggle("text-neutral-400", unlocked);
+                    desc.classList.toggle("text-neutral-500", !unlocked);
+                }
+            });
+        }
+
+        function wireLinks() {
+            const url = AFTERBYTES_CONFIG.previewUrl;
+            ["ctaBack", "ctaBack2"].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                if (url) el.setAttribute("href", url);
+                else el.setAttribute("href", "#");
+            });
+
+            const frame = document.getElementById("trailerFrame");
+            if (frame && AFTERBYTES_CONFIG.trailerEmbedUrl) {
+                frame.setAttribute("src", AFTERBYTES_CONFIG.trailerEmbedUrl);
+            }
+        }
+
+        function init() {
+            updateCountdown();
+            updateFunding();
+            updateMilestones();
+            wireLinks();
+        }
+
+        document.addEventListener("DOMContentLoaded", init);
+    </script>
+
+</body>
+</html>
+
+
+

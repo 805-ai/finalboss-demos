@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFTERBYTES - The Experience</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: #000; 
+            color: #fff; 
+            overflow: hidden;
+            cursor: none;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d4af37;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s, width 0.2s, height 0.2s;
+            mix-blend-mode: difference;
+        }
+        
+        .cursor-dot {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: #d4af37;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .demo-container { 
+            width: 100vw; 
+            height: 100vh; 
+            position: relative;
+            background: radial-gradient(ellipse at center, #0a0805 0%, #000 100%);
+        }
+
+        /* Starfield */
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        /* Floating Particles */
+        .particles-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #d4af37;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: floatUp 15s linear infinite;
+        }
+
+        /* Holographic Grid */
+        .holo-grid {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40%;
+            background: 
+                linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px),
+                linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: perspective(500px) rotateX(60deg);
+            transform-origin: bottom;
+            animation: gridPulse 4s ease-in-out infinite;
+        }
+
+        .scene { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            opacity: 0; 
+            transition: opacity 1.5s ease-in-out;
+            z-index: 10;
+        }
+
+        .scene.active { opacity: 1; }
+
+        .cinzel { font-family: 'Cinzel', serif; }
+        .orbitron { font-family: 'Orbitron', sans-serif; }
+
+        /* Scene 1: The Awakening */
+        .awakening-text {
+            font-size: 8vw;
+            font-weight: 900;
+            text-align: center;
+            line-height: 1.2;
+        }
+        
+        .glitch {
+            position: relative;
+            animation: glitch 2s infinite;
+        }
+        
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch::before {
+            animation: glitchTop 1s linear infinite;
+            clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+            -webkit-clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+        }
+        
+        .glitch::after {
+            animation: glitchBottom 1.5s linear infinite;
+            clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+            -webkit-clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+        }
+
+        /* Scene 2: DNA Helix */
+        .dna-container {
+            position: relative;
+            width: 300px;
+            height: 400px;
+        }
+        
+        .dna-strand {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .dna-node {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #d4af37;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #d4af37, 0 0 40px #d4af37;
+            animation: dnaRotate 4s linear infinite;
+        }
+        
+        .dna-node.right {
+            animation-delay: -2s;
+        }
+        
+        .dna-connector {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #d4af37, transparent, #d4af37);
+        }
+
+        /* Scene 3: Memory Upload */
+        .upload-visual {
+            text-align: center;
+        }
+        
+        .brain-icon {
+            font-size: 150px;
+            margin-bottom: 32px;
+            animation: brainPulse 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.5));
+        }
+        
+        .upload-progress {
+            width: 400px;
+            height: 8px;
+            background: #1a1a1a;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 24px auto;
+        }
+        
+        .upload-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #d4af37, #f4e4ba, #d4af37);
+            background-size: 200% 100%;
+            animation: uploadProgress 3s ease-in-out infinite, shimmer 2s linear infinite;
+            border-radius: 4px;
+        }
+        
+        .upload-stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            margin-top: 32px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            color: #d4af37;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+        
+        .stat-value .counting {
+            animation: countUp 2s ease-out forwards;
+        }
+
+        /* Scene 4: Timeline Creation */
+        .timeline-3d {
+            perspective: 1000px;
+            width: 90%;
+            max-width: 800px;
+        }
+        
+        .timeline-track-3d {
+            display: flex;
+            gap: 16px;
+            transform: rotateX(10deg) rotateY(-5deg);
+            transform-style: preserve-3d;
+        }
+        
+        .memory-block {
+            width: 150px;
+            height: 100px;
+            background: linear-gradient(135deg, #1a1510, #2a2015);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transform-style: preserve-3d;
+            animation: blockFloat 3s ease-in-out infinite;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        
+        .memory-block:nth-child(1) { animation-delay: 0s; }
+        .memory-block:nth-child(2) { animation-delay: 0.3s; }
+        .memory-block:nth-child(3) { animation-delay: 0.6s; }
+        .memory-block:nth-child(4) { animation-delay: 0.9s; }
+        
+        .memory-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+        
+        .memory-label {
+            font-size: 11px;
+            color: #d4af37;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+            animation: lineGlow 2s ease-in-out infinite;
+        }
+
+        /* Scene 5: Voice Synthesis */
+        .voice-visual {
+            text-align: center;
+        }
+        
+        .audio-spectrum {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            height: 200px;
+            margin-bottom: 32px;
+        }
+        
+        .spectrum-bar {
+            width: 8px;
+            background: linear-gradient(to top, #d4af37, #f4e4ba);
+            border-radius: 4px;
+            animation: spectrumDance 0.5s ease-in-out infinite;
+        }
+        
+        .voice-text {
+            font-size: 28px;
+            color: #fff;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .voice-text .word {
+            display: inline-block;
+            opacity: 0;
+            animation: wordReveal 0.3s ease forwards;
+        }
+
+        /* Scene 6: The Reveal */
+        .reveal-container {
+            text-align: center;
+            perspective: 1000px;
+        }
+        
+        .trailer-frame {
+            width: 700px;
+            height: 394px;
+            background: #000;
+            border: 3px solid #d4af37;
+            border-radius: 4px;
+            margin: 0 auto 32px;
+            position: relative;
+            overflow: hidden;
+            transform: rotateX(5deg);
+            box-shadow: 
+                0 50px 100px rgba(0,0,0,0.8),
+                0 0 100px rgba(212, 175, 55, 0.3),
+                inset 0 0 100px rgba(212, 175, 55, 0.1);
+            animation: frameFloat 6s ease-in-out infinite;
+        }
+        
+        .trailer-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .trailer-name {
+            font-family: 'Cinzel', serif;
+            font-size: 64px;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 60px rgba(212, 175, 55, 0.8);
+            animation: nameReveal 3s ease-out forwards;
+        }
+        
+        .trailer-dates {
+            font-size: 24px;
+            color: #d4af37;
+            letter-spacing: 0.3em;
+            margin-top: 16px;
+            animation: datesReveal 2s ease 1s forwards;
+            opacity: 0;
+        }
+        
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: rgba(212, 175, 55, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: #000;
+            cursor: pointer;
+            animation: playPulse 2s ease-in-out infinite;
+            z-index: 10;
+        }
+        
+        .scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.1),
+                rgba(0, 0, 0, 0.1) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            animation: scanlineMove 8s linear infinite;
+        }
+
+        /* Scene 7: Final CTA */
+        .final-cta {
+            text-align: center;
+        }
+        
+        .mega-title {
+            font-size: 12vw;
+            font-weight: 900;
+            background: linear-gradient(135deg, #d4af37 0%, #f4e4ba 25%, #d4af37 50%, #b8860b 75%, #d4af37 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: goldShine 3s linear infinite;
+            filter: drop-shadow(0 0 60px rgba(212, 175, 55, 0.5));
+        }
+        
+        .mega-sub {
+            font-size: 2vw;
+            color: #666;
+            letter-spacing: 0.5em;
+            margin: 32px 0;
+        }
+        
+        .magic-button {
+            display: inline-block;
+            padding: 24px 64px;
+            background: linear-gradient(135deg, #d4af37, #b8941f);
+            color: #000;
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: 0.15em;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            animation: buttonFloat 3s ease-in-out infinite;
+        }
+        
+        .magic-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(255,255,255,0.3),
+                transparent
+            );
+            animation: buttonShine 3s linear infinite;
+        }
+        
+        .magic-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2px solid #fff;
+            opacity: 0;
+            animation: buttonBorder 2s ease-in-out infinite;
+        }
+
+        /* Animations */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+        
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+        
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+        
+        @keyframes glitchTop {
+            0%, 100% { transform: translate(0); opacity: 0.8; }
+            50% { transform: translate(-5px, 0); opacity: 1; }
+        }
+        
+        @keyframes glitchBottom {
+            0%, 100% { transform: translate(0); opacity: 0.8; }
+            50% { transform: translate(5px, 0); opacity: 1; }
+        }
+        
+        @keyframes dnaRotate {
+            0% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(100px) translateY(25%); }
+            50% { transform: translateX(0) translateY(50%); }
+            75% { transform: translateX(-100px) translateY(75%); }
+            100% { transform: translateX(0) translateY(100%); }
+        }
+        
+        @keyframes brainPulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.5)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 60px rgba(212, 175, 55, 0.8)); }
+        }
+        
+        @keyframes uploadProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        @keyframes blockFloat {
+            0%, 100% { transform: translateZ(0) translateY(0); }
+            50% { transform: translateZ(30px) translateY(-10px); }
+        }
+        
+        @keyframes lineGlow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes spectrumDance {
+            0%, 100% { height: 20px; }
+            50% { height: var(--max-height, 100px); }
+        }
+        
+        @keyframes wordReveal {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes frameFloat {
+            0%, 100% { transform: rotateX(5deg) translateY(0); }
+            50% { transform: rotateX(3deg) translateY(-10px); }
+        }
+        
+        @keyframes nameReveal {
+            0% { opacity: 0; transform: scale(1.5); filter: blur(20px); }
+            100% { opacity: 1; transform: scale(1); filter: blur(0); }
+        }
+        
+        @keyframes datesReveal {
+            to { opacity: 1; }
+        }
+        
+        @keyframes playPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+            50% { transform: translate(-50%, -50%) scale(1.1); box-shadow: 0 0 0 20px rgba(212, 175, 55, 0); }
+        }
+        
+        @keyframes scanlineMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100%); }
+        }
+        
+        @keyframes goldShine {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+        
+        @keyframes buttonFloat {
+            0%, 100% { transform: translateY(0); box-shadow: 0 10px 40px rgba(212, 175, 55, 0.4); }
+            50% { transform: translateY(-5px); box-shadow: 0 20px 60px rgba(212, 175, 55, 0.6); }
+        }
+        
+        @keyframes buttonShine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+        
+        @keyframes buttonBorder {
+            0%, 100% { opacity: 0; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.05); }
+        }
+
+        /* Progress Bar */
+        .progress-bar { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            height: 3px; 
+            background: linear-gradient(90deg, #d4af37, #f4e4ba, #d4af37); 
+            background-size: 200% 100%;
+            animation: shimmer 2s linear infinite;
+            width: 0%; 
+            transition: width 0.1s linear;
+            z-index: 100;
+        }
+
+        /* Controls */
+        .controls { 
+            position: fixed; 
+            bottom: 20px; 
+            right: 20px; 
+            display: flex; 
+            gap: 10px; 
+            z-index: 1000; 
+        }
+        .controls button { 
+            padding: 8px 16px; 
+            background: rgba(212, 175, 55, 0.1); 
+            border: 1px solid rgba(212, 175, 55, 0.3); 
+            color: #d4af37; 
+            cursor: none; 
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            transition: all 0.3s;
+        }
+        .controls button:hover { 
+            background: #d4af37; 
+            color: #000; 
+        }
+        
+        /* Patent */
+        .patent-badge {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 999;
+            font-size: 11px;
+            font-family: monospace;
+            letter-spacing: 0.15em;
+            color: #39ff14;
+            text-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14;
+            animation: patentPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes patentPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-dot" id="cursorDot"></div>
+
+    <div class="demo-container">
+        <!-- Starfield Background -->
+        <div class="stars" id="stars"></div>
+        
+        <!-- Floating Particles -->
+        <div class="particles-container" id="particles"></div>
+        
+        <!-- Holographic Grid -->
+        <div class="holo-grid"></div>
+
+        <!-- Patent Badge -->
+        <div style="position: fixed; top: 20px; left: 20px; z-index: 999; font-size: 13px; font-family: monospace; letter-spacing: 0.15em; color: #ff0000; text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000; font-weight: bold;">
+            ⚠️ PATENTS PENDING
+        </div>
+        <div style="position: fixed; top: 20px; right: 20px; z-index: 999; font-size: 11px; font-family: monospace; letter-spacing: 0.1em; color: #d4af37; text-shadow: 0 0 5px rgba(212,175,55,0.5);">
+            U.S. App. 19/240,581 • 19/437,072
+        </div>
+        <div style="position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); z-index: 999; font-size: 10px; font-family: monospace; letter-spacing: 0.2em; color: #ff0000; text-shadow: 0 0 10px #ff0000; text-align: center; background: rgba(0,0,0,0.7); padding: 8px 16px; border: 1px solid #ff0000;">
+            ⚠️ PATENTS PENDING • U.S. APP. 19/240,581 & 19/437,072 ⚠️
+        </div>
+
+        <!-- Scene 1: The Awakening -->
+        <div class="scene active" data-duration="5000">
+            <div class="awakening-text cinzel">
+                <div class="glitch" data-text="WHAT IF">WHAT IF</div>
+                <div style="color: #d4af37; margin-top: 16px;">YOUR LEGACY</div>
+                <div class="glitch" data-text="WAS IMMORTAL?">WAS IMMORTAL?</div>
+            </div>
+        </div>
+
+        <!-- Scene 2: DNA Helix (representing digital DNA) -->
+        <div class="scene" data-duration="5000">
+            <div style="text-align: center;">
+                <div style="font-size: 14px; color: #d4af37; letter-spacing: 0.5em; margin-bottom: 48px;">DIGITIZING YOUR ESSENCE</div>
+                <div class="dna-container">
+                    <svg width="300" height="400" style="overflow: visible;">
+                        <defs>
+                            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#d4af37"/>
+                                <stop offset="50%" style="stop-color:#f4e4ba"/>
+                                <stop offset="100%" style="stop-color:#d4af37"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- DNA Animation handled by CSS -->
+                    </svg>
+                </div>
+                <div style="font-size: 24px; color: #fff; margin-top: 32px;" class="cinzel">YOUR MEMORIES. YOUR VOICE. YOUR STORY.</div>
+            </div>
+        </div>
+
+        <!-- Scene 3: Memory Upload -->
+        <div class="scene" data-duration="6000">
+            <div class="upload-visual">
+                <div class="brain-icon">🧠</div>
+                <div style="font-size: 14px; color: #d4af37; letter-spacing: 0.4em;">UPLOADING MEMORIES</div>
+                <div class="upload-progress">
+                    <div class="upload-bar"></div>
+                </div>
+                <div class="upload-stats">
+                    <div class="stat-item">
+                        <div class="stat-value orbitron">2,847</div>
+                        <div style="font-size: 11px; color: #666; margin-top: 4px;">PHOTOS</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value orbitron">156</div>
+                        <div style="font-size: 11px; color: #666; margin-top: 4px;">VIDEOS</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value orbitron">3:24</div>
+                        <div style="font-size: 11px; color: #666; margin-top: 4px;">VOICE</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value orbitron">∞</div>
+                        <div style="font-size: 11px; color: #666; margin-top: 4px;">LEGACY</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 4: Timeline Creation -->
+        <div class="scene" data-duration="6000">
+            <div style="text-align: center; margin-bottom: 48px;">
+                <div style="font-size: 14px; color: #d4af37; letter-spacing: 0.5em;">ASSEMBLING YOUR TIMELINE</div>
+            </div>
+            <div class="timeline-3d">
+                <div class="timeline-track-3d">
+                    <div class="memory-block">
+                        <div class="memory-icon">👶</div>
+                        <div class="memory-label">Birth</div>
+                    </div>
+                    <div class="memory-block">
+                        <div class="memory-icon">🎓</div>
+                        <div class="memory-label">Growth</div>
+                    </div>
+                    <div class="memory-block">
+                        <div class="memory-icon">💍</div>
+                        <div class="memory-label">Love</div>
+                    </div>
+                    <div class="memory-block">
+                        <div class="memory-icon">🏆</div>
+                        <div class="memory-label">Triumph</div>
+                    </div>
+                    <div class="memory-block">
+                        <div class="memory-icon">⭐</div>
+                        <div class="memory-label">Legacy</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 5: Voice Synthesis -->
+        <div class="scene" data-duration="6000">
+            <div class="voice-visual">
+                <div style="font-size: 14px; color: #d4af37; letter-spacing: 0.5em; margin-bottom: 32px;">SYNTHESIZING YOUR VOICE</div>
+                <div class="audio-spectrum" id="spectrum"></div>
+                <div class="voice-text cinzel" id="voiceText">
+                    "I love you all. Thank you for being part of my journey."
+                </div>
+                <div style="font-size: 12px; color: #666; margin-top: 24px; letter-spacing: 0.2em;">— SPOKEN IN YOUR VOICE, FOREVER</div>
+            </div>
+        </div>
+
+        <!-- Scene 6: The Reveal -->
+        <div class="scene" data-duration="7000">
+            <div class="reveal-container">
+                <div style="font-size: 14px; color: #d4af37; letter-spacing: 0.5em; margin-bottom: 32px;">YOUR FINAL TRAILER</div>
+                <div class="trailer-frame">
+                    <div class="scanlines"></div>
+                    <div class="trailer-content">
+                        <div class="trailer-name cinzel">JOHN SMITH</div>
+                        <div class="trailer-dates">1952 — 2026</div>
+                    </div>
+                </div>
+                <div style="font-size: 18px; color: #666;">2:34 • 4K HDR • Dolby Atmos</div>
+            </div>
+        </div>
+
+        <!-- Scene 7: Final CTA -->
+        <div class="scene" data-duration="8000">
+            <div class="final-cta">
+                <div class="mega-title cinzel">DIE RIGHT.</div>
+                <div class="mega-sub">YOUR STORY DESERVES A TRAILER</div>
+                <button class="magic-button">BEGIN YOUR LEGACY</button>
+                <div style="margin-top: 32px; font-size: 11px; color: #39ff14; letter-spacing: 0.2em; text-shadow: 0 0 10px #39ff14;">
+                    ⚠️ PATENTS PENDING • U.S. APP. 19/240,581 • 19/437,072
+                </div>
+            </div>
+        </div>
+
+        <div class="progress-bar" id="progress"></div>
+    </div>
+
+    <div class="controls">
+        <button id="restartBtn">RESTART</button>
+        <button id="pauseBtn">PAUSE</button>
+    </div>
+
+    <script>
+        // Custom Cursor
+        const cursor = document.getElementById('cursor');
+        const cursorDot = document.getElementById('cursorDot');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX - 10 + 'px';
+            cursor.style.top = e.clientY - 10 + 'px';
+            cursorDot.style.left = e.clientX - 3 + 'px';
+            cursorDot.style.top = e.clientY - 3 + 'px';
+        });
+
+        // Generate Stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            star.style.opacity = Math.random() * 0.5 + 0.3;
+            starsContainer.appendChild(star);
+        }
+
+        // Generate Particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Generate Audio Spectrum
+        const spectrum = document.getElementById('spectrum');
+        for (let i = 0; i < 40; i++) {
+            const bar = document.createElement('div');
+            bar.className = 'spectrum-bar';
+            bar.style.setProperty('--max-height', (30 + Math.random() * 150) + 'px');
+            bar.style.animationDelay = (Math.random() * 0.5) + 's';
+            spectrum.appendChild(bar);
+        }
+
+        // Scene Management
+        const scenes = document.querySelectorAll('.scene');
+        const progressBar = document.getElementById('progress');
+        let currentScene = 0;
+        let isPaused = false;
+        let sceneTimeout;
+
+        function showScene(index) {
+            scenes.forEach(s => s.classList.remove('active'));
+            if (index < scenes.length) {
+                scenes[index].classList.add('active');
+                const duration = parseInt(scenes[index].dataset.duration);
+                
+                progressBar.style.transition = 'none';
+                progressBar.style.width = '0%';
+                setTimeout(() => {
+                    progressBar.style.transition = `width ${duration}ms linear`;
+                    progressBar.style.width = '100%';
+                }, 10);
+
+                if (!isPaused) {
+                    sceneTimeout = setTimeout(() => {
+                        currentScene++;
+                        if (currentScene < scenes.length) {
+                            showScene(currentScene);
+                        } else {
+                            currentScene = 0;
+                            showScene(0);
+                        }
+                    }, duration);
+                }
+            }
+        }
+
+        document.getElementById('restartBtn').addEventListener('click', () => {
+            clearTimeout(sceneTimeout);
+            currentScene = 0;
+            isPaused = false;
+            document.getElementById('pauseBtn').textContent = 'PAUSE';
+            showScene(0);
+        });
+
+        document.getElementById('pauseBtn').addEventListener('click', () => {
+            isPaused = !isPaused;
+            document.getElementById('pauseBtn').textContent = isPaused ? 'PLAY' : 'PAUSE';
+            if (!isPaused) showScene(currentScene);
+            else clearTimeout(sceneTimeout);
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                clearTimeout(sceneTimeout);
+                currentScene = (currentScene + 1) % scenes.length;
+                showScene(currentScene);
+            } else if (e.key === 'ArrowLeft') {
+                clearTimeout(sceneTimeout);
+                currentScene = currentScene > 0 ? currentScene - 1 : scenes.length - 1;
+                showScene(currentScene);
+            } else if (e.key === ' ') {
+                e.preventDefault();
+                document.getElementById('pauseBtn').click();
+            }
+        });
+
+        showScene(0);
+    </script>
+</body>
+</html>

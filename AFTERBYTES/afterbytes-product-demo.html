@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFTERBYTES - Product Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: #0a0a0a; 
+            color: #fff; 
+            overflow: hidden; 
+        }
+
+        .demo-container { 
+            width: 100vw; 
+            height: 100vh; 
+            position: relative; 
+        }
+
+        .scene { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            opacity: 0; 
+            transition: opacity 0.8s ease-in-out; 
+            padding: 40px;
+        }
+
+        .scene.active { opacity: 1; }
+
+        .cinzel { font-family: 'Cinzel', serif; }
+
+        /* Mock UI Styles */
+        .mock-browser {
+            width: 90%;
+            max-width: 1000px;
+            background: #111;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 80px rgba(0,0,0,0.8), 0 0 40px rgba(212, 175, 55, 0.1);
+            border: 1px solid #333;
+        }
+        
+        .browser-bar {
+            background: #1a1a1a;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .browser-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .browser-dot.red { background: #ff5f56; }
+        .browser-dot.yellow { background: #ffbd2e; }
+        .browser-dot.green { background: #27c93f; }
+        
+        .browser-url {
+            flex: 1;
+            margin-left: 16px;
+            background: #0a0a0a;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #666;
+            font-family: monospace;
+        }
+        
+        .browser-content {
+            padding: 0;
+            min-height: 450px;
+        }
+
+        /* Dashboard Scene */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            height: 450px;
+        }
+        
+        .sidebar {
+            background: #0d0d0d;
+            padding: 24px 16px;
+            border-right: 1px solid #222;
+        }
+        
+        .sidebar-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 18px;
+            color: #d4af37;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+        
+        .sidebar-item {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .sidebar-item.active {
+            background: rgba(212, 175, 55, 0.1);
+            color: #d4af37;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        
+        .main-content {
+            padding: 24px;
+            background: #0a0a0a;
+        }
+        
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .main-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .btn-gold {
+            background: linear-gradient(135deg, #d4af37, #b8941f);
+            color: #000;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        
+        .stat-card {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 20px;
+            animation: cardPop 0.5s ease forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .stat-card:nth-child(1) { animation-delay: 0.2s; }
+        .stat-card:nth-child(2) { animation-delay: 0.4s; }
+        .stat-card:nth-child(3) { animation-delay: 0.6s; }
+        
+        .stat-label {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #d4af37;
+        }
+
+        /* Upload Scene */
+        .upload-area {
+            border: 2px dashed #333;
+            border-radius: 16px;
+            padding: 60px;
+            text-align: center;
+            transition: all 0.3s;
+            animation: borderGlow 2s ease infinite;
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        
+        .upload-text {
+            color: #666;
+            margin-bottom: 16px;
+        }
+        
+        .upload-formats {
+            font-size: 11px;
+            color: #444;
+        }
+
+        /* Timeline Editor Scene */
+        .timeline-editor {
+            width: 100%;
+        }
+        
+        .preview-window {
+            background: #000;
+            height: 220px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #222;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .preview-text {
+            font-family: 'Cinzel', serif;
+            font-size: 32px;
+            color: #d4af37;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+            animation: fadeInScale 1s ease forwards;
+        }
+        
+        .timeline-track {
+            background: #111;
+            height: 60px;
+            border-radius: 8px;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            border: 1px solid #222;
+        }
+        
+        .timeline-clip {
+            height: 44px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.3), rgba(212, 175, 55, 0.1));
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            font-size: 11px;
+            color: #d4af37;
+            animation: clipSlide 0.5s ease forwards;
+            opacity: 0;
+            transform: scaleX(0);
+        }
+        
+        .timeline-clip:nth-child(1) { width: 120px; animation-delay: 0.2s; }
+        .timeline-clip:nth-child(2) { width: 180px; animation-delay: 0.4s; }
+        .timeline-clip:nth-child(3) { width: 100px; animation-delay: 0.6s; }
+        .timeline-clip:nth-child(4) { width: 150px; animation-delay: 0.8s; }
+        
+        .playhead {
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background: #d4af37;
+            box-shadow: 0 0 10px #d4af37;
+            animation: playheadMove 3s linear infinite;
+        }
+
+        /* Voice Clone Scene */
+        .voice-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            width: 100%;
+        }
+        
+        .voice-card {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 24px;
+        }
+        
+        .voice-card h3 {
+            font-size: 14px;
+            color: #d4af37;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .waveform {
+            height: 60px;
+            background: #0a0a0a;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            padding: 0 20px;
+        }
+        
+        .wave-bar {
+            width: 4px;
+            background: #d4af37;
+            border-radius: 2px;
+            animation: waveAnim 0.8s ease infinite;
+        }
+        
+        .clone-status {
+            margin-top: 16px;
+            padding: 12px;
+            background: rgba(39, 201, 63, 0.1);
+            border: 1px solid rgba(39, 201, 63, 0.3);
+            border-radius: 8px;
+            color: #27c93f;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        /* Export Scene */
+        .export-preview {
+            text-align: center;
+        }
+        
+        .export-thumbnail {
+            width: 320px;
+            height: 180px;
+            background: linear-gradient(135deg, #1a1510, #0a0a08);
+            border: 2px solid #d4af37;
+            border-radius: 8px;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
+        }
+        
+        .export-thumbnail span {
+            font-family: 'Cinzel', serif;
+            font-size: 24px;
+            color: #d4af37;
+        }
+        
+        .export-info {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 24px;
+        }
+        
+        .export-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #d4af37;
+            color: #d4af37;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Animations */
+        @keyframes cardPop {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes borderGlow {
+            0%, 100% { border-color: #333; }
+            50% { border-color: #d4af37; }
+        }
+        
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        @keyframes clipSlide {
+            to { opacity: 1; transform: scaleX(1); }
+        }
+        
+        @keyframes playheadMove {
+            from { left: 0; }
+            to { left: 100%; }
+        }
+        
+        @keyframes waveAnim {
+            0%, 100% { height: 20px; }
+            50% { height: 50px; }
+        }
+
+        /* Progress Bar */
+        .progress-bar { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            height: 3px; 
+            background: linear-gradient(90deg, #d4af37, #f4e4ba); 
+            width: 0%; 
+            transition: width 0.1s linear; 
+        }
+
+        /* Controls */
+        .controls { 
+            position: fixed; 
+            bottom: 20px; 
+            right: 20px; 
+            display: flex; 
+            gap: 10px; 
+            z-index: 1000; 
+        }
+        .controls button { 
+            padding: 8px 16px; 
+            background: rgba(212, 175, 55, 0.1); 
+            border: 1px solid rgba(212, 175, 55, 0.3); 
+            color: #d4af37; 
+            cursor: pointer; 
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            transition: all 0.3s;
+        }
+        .controls button:hover { 
+            background: #d4af37; 
+            color: #000; 
+        }
+
+        /* Scene Titles */
+        .scene-title {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            color: #d4af37;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        
+        <!-- PATENT WATERMARK -->
+        <div style="position: fixed; top: 20px; left: 20px; z-index: 999; font-size: 13px; font-family: monospace; letter-spacing: 0.15em; color: #ff0000; text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000; font-weight: bold;">
+            ⚠️ PATENTS PENDING
+        </div>
+        <div style="position: fixed; top: 20px; right: 20px; z-index: 999; font-size: 11px; font-family: monospace; letter-spacing: 0.1em; color: #d4af37; text-shadow: 0 0 5px rgba(212,175,55,0.5);">
+            U.S. App. 19/240,581 • 19/437,072
+        </div>
+        <div style="position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); z-index: 999; font-size: 10px; font-family: monospace; letter-spacing: 0.2em; color: #ff0000; text-shadow: 0 0 10px #ff0000; text-align: center; background: rgba(0,0,0,0.7); padding: 8px 16px; border: 1px solid #ff0000;">
+            ⚠️ PATENTS PENDING • U.S. APP. 19/240,581 & 19/437,072 ⚠️
+        </div>
+
+        <!-- Scene 1: Dashboard -->
+        <div class="scene active" data-duration="6000">
+            <div class="scene-title">Your Dashboard</div>
+            <div class="mock-browser">
+                <div class="browser-bar">
+                    <div class="browser-dot red"></div>
+                    <div class="browser-dot yellow"></div>
+                    <div class="browser-dot green"></div>
+                    <div class="browser-url">afterbytes.com/dashboard</div>
+                </div>
+                <div class="browser-content">
+                    <div class="dashboard">
+                        <div class="sidebar">
+                            <div class="sidebar-logo cinzel">AFTERBYTES</div>
+                            <div class="sidebar-item active">📊 Dashboard</div>
+                            <div class="sidebar-item">🎬 My Trailer</div>
+                            <div class="sidebar-item">🔐 The Vault</div>
+                            <div class="sidebar-item">🎤 Voice Clone</div>
+                            <div class="sidebar-item">👥 Successors</div>
+                            <div class="sidebar-item">⚙️ Settings</div>
+                        </div>
+                        <div class="main-content">
+                            <div class="main-header">
+                                <div class="main-title">Welcome back, John</div>
+                                <button class="btn-gold">+ Create Trailer</button>
+                            </div>
+                            <div class="cards-grid">
+                                <div class="stat-card">
+                                    <div class="stat-label">Vault Storage</div>
+                                    <div class="stat-value">2.4 GB</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-label">Trailer Status</div>
+                                    <div class="stat-value" style="color: #27c93f;">Ready</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-label">Successors</div>
+                                    <div class="stat-value">3</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 2: Upload -->
+        <div class="scene" data-duration="5000">
+            <div class="scene-title">Upload Your Memories</div>
+            <div class="mock-browser">
+                <div class="browser-bar">
+                    <div class="browser-dot red"></div>
+                    <div class="browser-dot yellow"></div>
+                    <div class="browser-dot green"></div>
+                    <div class="browser-url">afterbytes.com/vault/upload</div>
+                </div>
+                <div class="browser-content" style="padding: 40px;">
+                    <div class="upload-area">
+                        <div class="upload-icon">📁</div>
+                        <div class="upload-text">Drag & drop your photos, videos, and audio</div>
+                        <button class="btn-gold">Browse Files</button>
+                        <div class="upload-formats" style="margin-top: 16px;">MP4, MOV, MP3, WAV, JPG, PNG • Up to 10GB per file</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 3: Timeline Editor -->
+        <div class="scene" data-duration="7000">
+            <div class="scene-title">Cinematic Editor</div>
+            <div class="mock-browser">
+                <div class="browser-bar">
+                    <div class="browser-dot red"></div>
+                    <div class="browser-dot yellow"></div>
+                    <div class="browser-dot green"></div>
+                    <div class="browser-url">afterbytes.com/studio/edit</div>
+                </div>
+                <div class="browser-content" style="padding: 20px;">
+                    <div class="timeline-editor">
+                        <div class="preview-window">
+                            <div class="playhead"></div>
+                            <div class="preview-text">"Remember me like this..."</div>
+                        </div>
+                        <div class="timeline-track">
+                            <div class="timeline-clip">🎬 Intro</div>
+                            <div class="timeline-clip">📸 Childhood</div>
+                            <div class="timeline-clip">💍 Wedding</div>
+                            <div class="timeline-clip">🎤 Message</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 4: Voice Clone -->
+        <div class="scene" data-duration="6000">
+            <div class="scene-title">Eternal Voice</div>
+            <div class="mock-browser">
+                <div class="browser-bar">
+                    <div class="browser-dot red"></div>
+                    <div class="browser-dot yellow"></div>
+                    <div class="browser-dot green"></div>
+                    <div class="browser-url">afterbytes.com/voice</div>
+                </div>
+                <div class="browser-content" style="padding: 30px;">
+                    <div class="voice-section">
+                        <div class="voice-card">
+                            <h3>Your Voice Sample</h3>
+                            <div class="waveform">
+                                <div class="wave-bar" style="animation-delay: 0s;"></div>
+                                <div class="wave-bar" style="animation-delay: 0.1s;"></div>
+                                <div class="wave-bar" style="animation-delay: 0.2s;"></div>
+                                <div class="wave-bar" style="animation-delay: 0.3s;"></div>
+                                <div class="wave-bar" style="animation-delay: 0.4s;"></div>
+                                <div class="wave-bar" style="animation-delay: 0.5s;"></div>
+                                <div class="wave-bar" style="animation-delay: 0.6s;"></div>
+                                <div class="wave-bar" style="animation-delay: 0.7s;"></div>
+                                <div class="wave-bar" style="animation-delay: 0.8s;"></div>
+                                <div class="wave-bar" style="animation-delay: 0.9s;"></div>
+                            </div>
+                            <div class="clone-status">✓ Voice Model Trained</div>
+                        </div>
+                        <div class="voice-card">
+                            <h3>Generate Message</h3>
+                            <textarea style="width: 100%; height: 80px; background: #0a0a0a; border: 1px solid #333; border-radius: 8px; padding: 12px; color: #fff; resize: none; font-family: inherit;" placeholder="Type what you want to say...">I love you all. Thank you for everything.</textarea>
+                            <button class="btn-gold" style="width: 100%; margin-top: 12px;">🎤 Generate in My Voice</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 5: Export -->
+        <div class="scene" data-duration="6000">
+            <div class="scene-title">Export & Share</div>
+            <div class="mock-browser">
+                <div class="browser-bar">
+                    <div class="browser-dot red"></div>
+                    <div class="browser-dot yellow"></div>
+                    <div class="browser-dot green"></div>
+                    <div class="browser-url">afterbytes.com/export</div>
+                </div>
+                <div class="browser-content" style="padding: 40px;">
+                    <div class="export-preview">
+                        <div class="export-thumbnail">
+                            <span class="cinzel">JOHN'S LEGACY</span>
+                        </div>
+                        <div class="export-info">
+                            Duration: 2:34 • Resolution: 4K • Format: MP4
+                        </div>
+                        <div class="export-buttons">
+                            <button class="btn-gold">⬇️ Download</button>
+                            <button class="btn-outline">🔗 Share Link</button>
+                            <button class="btn-outline">📧 Send to Successors</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="progress-bar" id="progress"></div>
+    </div>
+
+    <div class="controls">
+        <button id="restartBtn">RESTART</button>
+        <button id="pauseBtn">PAUSE</button>
+    </div>
+
+    <script>
+        const scenes = document.querySelectorAll('.scene');
+        const progressBar = document.getElementById('progress');
+        let currentScene = 0;
+        let isPaused = false;
+        let sceneTimeout;
+
+        function showScene(index) {
+            scenes.forEach(s => s.classList.remove('active'));
+            if (index < scenes.length) {
+                scenes[index].classList.add('active');
+                const duration = parseInt(scenes[index].dataset.duration);
+                
+                progressBar.style.transition = 'none';
+                progressBar.style.width = '0%';
+                setTimeout(() => {
+                    progressBar.style.transition = `width ${duration}ms linear`;
+                    progressBar.style.width = '100%';
+                }, 10);
+
+                if (!isPaused) {
+                    sceneTimeout = setTimeout(() => {
+                        currentScene++;
+                        if (currentScene < scenes.length) {
+                            showScene(currentScene);
+                        } else {
+                            currentScene = 0;
+                            showScene(0);
+                        }
+                    }, duration);
+                }
+            }
+        }
+
+        document.getElementById('restartBtn').addEventListener('click', () => {
+            clearTimeout(sceneTimeout);
+            currentScene = 0;
+            isPaused = false;
+            document.getElementById('pauseBtn').textContent = 'PAUSE';
+            showScene(0);
+        });
+
+        document.getElementById('pauseBtn').addEventListener('click', () => {
+            isPaused = !isPaused;
+            document.getElementById('pauseBtn').textContent = isPaused ? 'PLAY' : 'PAUSE';
+            if (!isPaused) showScene(currentScene);
+            else clearTimeout(sceneTimeout);
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                clearTimeout(sceneTimeout);
+                currentScene = (currentScene + 1) % scenes.length;
+                showScene(currentScene);
+            } else if (e.key === 'ArrowLeft') {
+                clearTimeout(sceneTimeout);
+                currentScene = currentScene > 0 ? currentScene - 1 : scenes.length - 1;
+                showScene(currentScene);
+            } else if (e.key === ' ') {
+                e.preventDefault();
+                document.getElementById('pauseBtn').click();
+            }
+        });
+
+        showScene(0);
+    </script>
+</body>
+</html>

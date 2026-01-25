@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFTERBYTES - Hollywood Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Bebas+Neue&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: #000; 
+            color: #fff; 
+            overflow: hidden; 
+        }
+
+        .demo-container { 
+            width: 100vw; 
+            height: 100vh; 
+            position: relative; 
+        }
+
+        .scene { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            opacity: 0; 
+            transition: opacity 1s ease-in-out; 
+        }
+
+        .scene.active { opacity: 1; }
+
+        .cinzel { font-family: 'Cinzel', serif; }
+        .bebas { font-family: 'Bebas Neue', sans-serif; }
+
+        /* Scene 1: Template Selection */
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 900px;
+        }
+        
+        .template-card {
+            position: relative;
+            aspect-ratio: 16/9;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s;
+            animation: cardReveal 0.6s ease forwards;
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        
+        .template-card:nth-child(1) { animation-delay: 0.1s; }
+        .template-card:nth-child(2) { animation-delay: 0.2s; }
+        .template-card:nth-child(3) { animation-delay: 0.3s; }
+        .template-card:nth-child(4) { animation-delay: 0.4s; }
+        .template-card:nth-child(5) { animation-delay: 0.5s; }
+        .template-card:nth-child(6) { animation-delay: 0.6s; }
+        
+        .template-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.4);
+        }
+        
+        .template-card.selected {
+            border: 3px solid #d4af37;
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.6);
+        }
+        
+        .template-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .template-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 16px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+        }
+        
+        .template-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .template-style {
+            font-size: 11px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        /* Template backgrounds */
+        .template-epic { background: linear-gradient(135deg, #1a0a00, #4a2000, #1a0a00); }
+        .template-noir { background: linear-gradient(135deg, #0a0a0a, #1a1a1a, #0a0a0a); }
+        .template-golden { background: linear-gradient(135deg, #1a1500, #3d3000, #1a1500); }
+        .template-modern { background: linear-gradient(135deg, #001a2a, #003050, #001a2a); }
+        .template-classic { background: linear-gradient(135deg, #1a0a0a, #2a1515, #1a0a0a); }
+        .template-cinematic { background: linear-gradient(135deg, #0a0a1a, #15152a, #0a0a1a); }
+
+        /* Scene 2: Editor with Effects */
+        .editor-container {
+            width: 95%;
+            max-width: 1100px;
+            background: #0a0a0a;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #222;
+        }
+        
+        .editor-toolbar {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px;
+            background: #111;
+            border-bottom: 1px solid #222;
+        }
+        
+        .tool-btn {
+            padding: 8px 16px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: #888;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .tool-btn.active {
+            background: rgba(212, 175, 55, 0.2);
+            border-color: #d4af37;
+            color: #d4af37;
+        }
+        
+        .editor-preview {
+            height: 350px;
+            background: #000;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .preview-content {
+            text-align: center;
+            z-index: 10;
+        }
+        
+        /* Cinematic Bars */
+        .cinema-bar {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: #000;
+            z-index: 20;
+        }
+        .cinema-bar.top { top: 0; }
+        .cinema-bar.bottom { bottom: 0; }
+        
+        /* Film Grain */
+        .film-grain {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.05;
+            pointer-events: none;
+            animation: grainAnim 0.5s steps(10) infinite;
+        }
+        
+        /* Lens Flare */
+        .lens-flare {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: flareMove 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        /* Vignette */
+        .vignette {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.8) 100%);
+            pointer-events: none;
+        }
+
+        /* Text Animations */
+        .hero-title {
+            font-family: 'Cinzel', serif;
+            font-size: 64px;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 60px rgba(212, 175, 55, 0.5);
+            animation: titleReveal 2s ease forwards;
+            letter-spacing: 0.1em;
+        }
+        
+        .hero-subtitle {
+            font-size: 18px;
+            color: #d4af37;
+            letter-spacing: 0.5em;
+            margin-top: 16px;
+            animation: subtitleReveal 2s ease 0.5s forwards;
+            opacity: 0;
+        }
+        
+        .hero-tagline {
+            font-size: 14px;
+            color: #666;
+            margin-top: 24px;
+            animation: fadeIn 2s ease 1s forwards;
+            opacity: 0;
+        }
+
+        /* Scene 3: Effects Panel */
+        .effects-panel {
+            width: 90%;
+            max-width: 1000px;
+        }
+        
+        .effects-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        
+        .effects-header h2 {
+            font-size: 14px;
+            color: #d4af37;
+            letter-spacing: 0.4em;
+            margin-bottom: 8px;
+        }
+        
+        .effects-header p {
+            color: #666;
+            font-size: 13px;
+        }
+        
+        .effects-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        
+        .effect-item {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            animation: effectPop 0.5s ease forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .effect-item:nth-child(1) { animation-delay: 0.1s; }
+        .effect-item:nth-child(2) { animation-delay: 0.15s; }
+        .effect-item:nth-child(3) { animation-delay: 0.2s; }
+        .effect-item:nth-child(4) { animation-delay: 0.25s; }
+        .effect-item:nth-child(5) { animation-delay: 0.3s; }
+        .effect-item:nth-child(6) { animation-delay: 0.35s; }
+        .effect-item:nth-child(7) { animation-delay: 0.4s; }
+        .effect-item:nth-child(8) { animation-delay: 0.45s; }
+        
+        .effect-item:hover {
+            border-color: #d4af37;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        .effect-item.active {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: #d4af37;
+        }
+        
+        .effect-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+        
+        .effect-name {
+            font-size: 12px;
+            color: #fff;
+            font-weight: 600;
+        }
+        
+        .effect-desc {
+            font-size: 10px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        /* Scene 4: Music Selection */
+        .music-panel {
+            width: 90%;
+            max-width: 800px;
+        }
+        
+        .music-track {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            animation: trackSlide 0.5s ease forwards;
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        
+        .music-track:nth-child(1) { animation-delay: 0.1s; }
+        .music-track:nth-child(2) { animation-delay: 0.2s; }
+        .music-track:nth-child(3) { animation-delay: 0.3s; }
+        .music-track:nth-child(4) { animation-delay: 0.4s; }
+        
+        .music-track:hover {
+            border-color: #d4af37;
+            background: #1a1a1a;
+        }
+        
+        .music-track.playing {
+            border-color: #d4af37;
+            background: rgba(212, 175, 55, 0.1);
+        }
+        
+        .track-play {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #d4af37, #b8941f);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .track-info {
+            flex: 1;
+        }
+        
+        .track-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .track-mood {
+            font-size: 12px;
+            color: #888;
+        }
+        
+        .track-waveform {
+            width: 200px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+        
+        .wave-line {
+            width: 3px;
+            background: #d4af37;
+            border-radius: 2px;
+            animation: waveformAnim 0.8s ease infinite;
+        }
+        
+        .track-duration {
+            font-size: 12px;
+            color: #666;
+            font-family: monospace;
+        }
+
+        /* Scene 5: Final Render */
+        .render-screen {
+            text-align: center;
+        }
+        
+        .render-preview {
+            width: 640px;
+            height: 360px;
+            background: #000;
+            border: 2px solid #d4af37;
+            border-radius: 8px;
+            margin: 0 auto 32px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 80px rgba(212, 175, 55, 0.3);
+        }
+        
+        .render-title {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Cinzel', serif;
+            font-size: 48px;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 40px rgba(212, 175, 55, 0.6);
+            animation: renderPulse 3s ease infinite;
+        }
+        
+        .render-badge {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(212, 175, 55, 0.9);
+            color: #000;
+            padding: 8px 16px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+        }
+        
+        .render-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 32px;
+        }
+        
+        .render-stat {
+            text-align: center;
+        }
+        
+        .render-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #d4af37;
+        }
+        
+        .render-stat-label {
+            font-size: 11px;
+            color: #666;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .render-cta {
+            display: inline-block;
+            padding: 16px 48px;
+            background: linear-gradient(135deg, #d4af37, #b8941f);
+            color: #000;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 0.1em;
+            border: none;
+            cursor: pointer;
+            animation: ctaGlow 2s ease infinite;
+        }
+
+        /* Animations */
+        @keyframes cardReveal {
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        @keyframes grainAnim {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-1%, -1%); }
+            20% { transform: translate(1%, 1%); }
+            30% { transform: translate(-1%, 1%); }
+            40% { transform: translate(1%, -1%); }
+            50% { transform: translate(-1%, 0); }
+            60% { transform: translate(1%, 0); }
+            70% { transform: translate(0, 1%); }
+            80% { transform: translate(0, -1%); }
+            90% { transform: translate(1%, 1%); }
+        }
+        
+        @keyframes flareMove {
+            0%, 100% { top: 10%; left: 10%; opacity: 0.5; }
+            25% { top: 20%; left: 70%; opacity: 0.8; }
+            50% { top: 60%; left: 80%; opacity: 0.3; }
+            75% { top: 70%; left: 20%; opacity: 0.6; }
+        }
+        
+        @keyframes titleReveal {
+            0% { opacity: 0; transform: scale(1.2); filter: blur(20px); }
+            100% { opacity: 1; transform: scale(1); filter: blur(0); }
+        }
+        
+        @keyframes subtitleReveal {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        @keyframes effectPop {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes trackSlide {
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes waveformAnim {
+            0%, 100% { height: 10px; }
+            50% { height: 35px; }
+        }
+        
+        @keyframes renderPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        @keyframes ctaGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(212, 175, 55, 0.8); }
+        }
+
+        /* Scene Title */
+        .scene-label {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            color: #d4af37;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+        }
+
+        /* Progress Bar */
+        .progress-bar { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            height: 3px; 
+            background: linear-gradient(90deg, #d4af37, #f4e4ba); 
+            width: 0%; 
+            transition: width 0.1s linear; 
+        }
+
+        /* Controls */
+        .controls { 
+            position: fixed; 
+            bottom: 20px; 
+            right: 20px; 
+            display: flex; 
+            gap: 10px; 
+            z-index: 1000; 
+        }
+        .controls button { 
+            padding: 8px 16px; 
+            background: rgba(212, 175, 55, 0.1); 
+            border: 1px solid rgba(212, 175, 55, 0.3); 
+            color: #d4af37; 
+            cursor: pointer; 
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            transition: all 0.3s;
+        }
+        .controls button:hover { 
+            background: #d4af37; 
+            color: #000; 
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        
+        <!-- PATENT WATERMARK -->
+        <div style="position: fixed; top: 20px; left: 20px; z-index: 999; font-size: 13px; font-family: monospace; letter-spacing: 0.15em; color: #ff0000; text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000; font-weight: bold;">
+            ⚠️ PATENTS PENDING
+        </div>
+        <div style="position: fixed; top: 20px; right: 20px; z-index: 999; font-size: 11px; font-family: monospace; letter-spacing: 0.1em; color: #d4af37; text-shadow: 0 0 5px rgba(212,175,55,0.5);">
+            U.S. App. 19/240,581 • 19/437,072
+        </div>
+        <div style="position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); z-index: 999; font-size: 10px; font-family: monospace; letter-spacing: 0.2em; color: #ff0000; text-shadow: 0 0 10px #ff0000; text-align: center; background: rgba(0,0,0,0.7); padding: 8px 16px; border: 1px solid #ff0000;">
+            ⚠️ PATENTS PENDING • U.S. APP. 19/240,581 & 19/437,072 ⚠️
+        </div>
+
+        <!-- Scene 1: Template Selection -->
+        <div class="scene active" data-duration="6000">
+            <div class="scene-label">Choose Your Style</div>
+            <div class="templates-grid">
+                <div class="template-card template-epic">
+                    <div class="template-overlay">
+                        <div class="template-name">EPIC</div>
+                        <div class="template-style">Dramatic, Bold, Powerful</div>
+                    </div>
+                </div>
+                <div class="template-card template-noir selected">
+                    <div class="template-overlay">
+                        <div class="template-name">NOIR</div>
+                        <div class="template-style">Classic, Moody, Timeless</div>
+                    </div>
+                </div>
+                <div class="template-card template-golden">
+                    <div class="template-overlay">
+                        <div class="template-name">GOLDEN AGE</div>
+                        <div class="template-style">Warm, Nostalgic, Rich</div>
+                    </div>
+                </div>
+                <div class="template-card template-modern">
+                    <div class="template-overlay">
+                        <div class="template-name">MODERN</div>
+                        <div class="template-style">Clean, Sleek, Minimal</div>
+                    </div>
+                </div>
+                <div class="template-card template-classic">
+                    <div class="template-overlay">
+                        <div class="template-name">CLASSIC FILM</div>
+                        <div class="template-style">Vintage, Romantic, Soft</div>
+                    </div>
+                </div>
+                <div class="template-card template-cinematic">
+                    <div class="template-overlay">
+                        <div class="template-name">CINEMATIC</div>
+                        <div class="template-style">Wide, Sweeping, Majestic</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 2: Editor with Effects -->
+        <div class="scene" data-duration="8000">
+            <div class="scene-label">Hollywood Editor</div>
+            <div class="editor-container">
+                <div class="editor-toolbar">
+                    <div class="tool-btn active">✂️ Cut</div>
+                    <div class="tool-btn">🎨 Color</div>
+                    <div class="tool-btn">✨ Effects</div>
+                    <div class="tool-btn">📝 Text</div>
+                    <div class="tool-btn">🎵 Audio</div>
+                    <div class="tool-btn">⏱️ Timing</div>
+                </div>
+                <div class="editor-preview">
+                    <div class="cinema-bar top"></div>
+                    <div class="film-grain"></div>
+                    <div class="lens-flare"></div>
+                    <div class="vignette"></div>
+                    <div class="preview-content">
+                        <div class="hero-title cinzel">JOHN SMITH</div>
+                        <div class="hero-subtitle">1952 — 2026</div>
+                        <div class="hero-tagline">"He lived life on his own terms."</div>
+                    </div>
+                    <div class="cinema-bar bottom"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 3: Effects Panel -->
+        <div class="scene" data-duration="6000">
+            <div class="scene-label">Cinematic Effects</div>
+            <div class="effects-panel">
+                <div class="effects-header">
+                    <h2>STUDIO-GRADE EFFECTS</h2>
+                    <p>Add Hollywood magic to your trailer</p>
+                </div>
+                <div class="effects-grid">
+                    <div class="effect-item active">
+                        <div class="effect-icon">🎞️</div>
+                        <div class="effect-name">Film Grain</div>
+                        <div class="effect-desc">Classic texture</div>
+                    </div>
+                    <div class="effect-item">
+                        <div class="effect-icon">🌟</div>
+                        <div class="effect-name">Lens Flare</div>
+                        <div class="effect-desc">Light streaks</div>
+                    </div>
+                    <div class="effect-item active">
+                        <div class="effect-icon">🖼️</div>
+                        <div class="effect-name">Vignette</div>
+                        <div class="effect-desc">Edge fade</div>
+                    </div>
+                    <div class="effect-item">
+                        <div class="effect-icon">⬛</div>
+                        <div class="effect-name">Letterbox</div>
+                        <div class="effect-desc">Cinema bars</div>
+                    </div>
+                    <div class="effect-item">
+                        <div class="effect-icon">🎨</div>
+                        <div class="effect-name">Color Grade</div>
+                        <div class="effect-desc">Mood tones</div>
+                    </div>
+                    <div class="effect-item">
+                        <div class="effect-icon">⚡</div>
+                        <div class="effect-name">Flash</div>
+                        <div class="effect-desc">Transitions</div>
+                    </div>
+                    <div class="effect-item">
+                        <div class="effect-icon">🌀</div>
+                        <div class="effect-name">Slow Motion</div>
+                        <div class="effect-desc">Dramatic pace</div>
+                    </div>
+                    <div class="effect-item">
+                        <div class="effect-icon">💫</div>
+                        <div class="effect-name">Ken Burns</div>
+                        <div class="effect-desc">Photo motion</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 4: Music Selection -->
+        <div class="scene" data-duration="6000">
+            <div class="scene-label">Epic Soundtrack</div>
+            <div class="music-panel">
+                <div class="music-track">
+                    <div class="track-play">▶️</div>
+                    <div class="track-info">
+                        <div class="track-name">Eternal Horizon</div>
+                        <div class="track-mood">Uplifting • Orchestral • Triumphant</div>
+                    </div>
+                    <div class="track-waveform">
+                        <div class="wave-line" style="height: 20px;"></div>
+                        <div class="wave-line" style="height: 35px;"></div>
+                        <div class="wave-line" style="height: 15px;"></div>
+                        <div class="wave-line" style="height: 28px;"></div>
+                        <div class="wave-line" style="height: 40px;"></div>
+                    </div>
+                    <div class="track-duration">3:24</div>
+                </div>
+                <div class="music-track playing">
+                    <div class="track-play">⏸️</div>
+                    <div class="track-info">
+                        <div class="track-name">Legacy of Light</div>
+                        <div class="track-mood">Emotional • Piano • Cinematic</div>
+                    </div>
+                    <div class="track-waveform">
+                        <div class="wave-line" style="animation-delay: 0s;"></div>
+                        <div class="wave-line" style="animation-delay: 0.1s;"></div>
+                        <div class="wave-line" style="animation-delay: 0.2s;"></div>
+                        <div class="wave-line" style="animation-delay: 0.3s;"></div>
+                        <div class="wave-line" style="animation-delay: 0.4s;"></div>
+                    </div>
+                    <div class="track-duration">2:48</div>
+                </div>
+                <div class="music-track">
+                    <div class="track-play">▶️</div>
+                    <div class="track-info">
+                        <div class="track-name">Time Remembered</div>
+                        <div class="track-mood">Nostalgic • Strings • Gentle</div>
+                    </div>
+                    <div class="track-waveform">
+                        <div class="wave-line" style="height: 25px;"></div>
+                        <div class="wave-line" style="height: 18px;"></div>
+                        <div class="wave-line" style="height: 32px;"></div>
+                        <div class="wave-line" style="height: 22px;"></div>
+                        <div class="wave-line" style="height: 30px;"></div>
+                    </div>
+                    <div class="track-duration">4:12</div>
+                </div>
+                <div class="music-track">
+                    <div class="track-play">▶️</div>
+                    <div class="track-info">
+                        <div class="track-name">Final Chapter</div>
+                        <div class="track-mood">Epic • Drums • Powerful</div>
+                    </div>
+                    <div class="track-waveform">
+                        <div class="wave-line" style="height: 38px;"></div>
+                        <div class="wave-line" style="height: 42px;"></div>
+                        <div class="wave-line" style="height: 35px;"></div>
+                        <div class="wave-line" style="height: 45px;"></div>
+                        <div class="wave-line" style="height: 40px;"></div>
+                    </div>
+                    <div class="track-duration">2:56</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 5: Final Render -->
+        <div class="scene" data-duration="8000">
+            <div class="scene-label">Your Masterpiece</div>
+            <div class="render-screen">
+                <div class="render-preview">
+                    <div class="film-grain"></div>
+                    <div class="vignette"></div>
+                    <div class="render-title cinzel">JOHN SMITH</div>
+                    <div class="render-badge">4K HDR</div>
+                </div>
+                <div class="render-stats">
+                    <div class="render-stat">
+                        <div class="render-stat-value">2:34</div>
+                        <div class="render-stat-label">Duration</div>
+                    </div>
+                    <div class="render-stat">
+                        <div class="render-stat-value">4K</div>
+                        <div class="render-stat-label">Resolution</div>
+                    </div>
+                    <div class="render-stat">
+                        <div class="render-stat-value">HDR</div>
+                        <div class="render-stat-label">Color</div>
+                    </div>
+                    <div class="render-stat">
+                        <div class="render-stat-value">5.1</div>
+                        <div class="render-stat-label">Audio</div>
+                    </div>
+                </div>
+                <button class="render-cta">EXPORT HOLLYWOOD TRAILER</button>
+            </div>
+        </div>
+
+        <div class="progress-bar" id="progress"></div>
+    </div>
+
+    <div class="controls">
+        <button id="restartBtn">RESTART</button>
+        <button id="pauseBtn">PAUSE</button>
+    </div>
+
+    <script>
+        const scenes = document.querySelectorAll('.scene');
+        const progressBar = document.getElementById('progress');
+        let currentScene = 0;
+        let isPaused = false;
+        let sceneTimeout;
+
+        function showScene(index) {
+            scenes.forEach(s => s.classList.remove('active'));
+            if (index < scenes.length) {
+                scenes[index].classList.add('active');
+                const duration = parseInt(scenes[index].dataset.duration);
+                
+                progressBar.style.transition = 'none';
+                progressBar.style.width = '0%';
+                setTimeout(() => {
+                    progressBar.style.transition = `width ${duration}ms linear`;
+                    progressBar.style.width = '100%';
+                }, 10);
+
+                if (!isPaused) {
+                    sceneTimeout = setTimeout(() => {
+                        currentScene++;
+                        if (currentScene < scenes.length) {
+                            showScene(currentScene);
+                        } else {
+                            currentScene = 0;
+                            showScene(0);
+                        }
+                    }, duration);
+                }
+            }
+        }
+
+        document.getElementById('restartBtn').addEventListener('click', () => {
+            clearTimeout(sceneTimeout);
+            currentScene = 0;
+            isPaused = false;
+            document.getElementById('pauseBtn').textContent = 'PAUSE';
+            showScene(0);
+        });
+
+        document.getElementById('pauseBtn').addEventListener('click', () => {
+            isPaused = !isPaused;
+            document.getElementById('pauseBtn').textContent = isPaused ? 'PLAY' : 'PAUSE';
+            if (!isPaused) showScene(currentScene);
+            else clearTimeout(sceneTimeout);
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                clearTimeout(sceneTimeout);
+                currentScene = (currentScene + 1) % scenes.length;
+                showScene(currentScene);
+            } else if (e.key === 'ArrowLeft') {
+                clearTimeout(sceneTimeout);
+                currentScene = currentScene > 0 ? currentScene - 1 : scenes.length - 1;
+                showScene(currentScene);
+            } else if (e.key === ' ') {
+                e.preventDefault();
+                document.getElementById('pauseBtn').click();
+            }
+        });
+
+        showScene(0);
+    </script>
+</body>
+</html>
