@@ -1,291 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LCES - Likeness Consent & Enforcement System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body { 
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(180deg, #0a0a1a 0%, #000 100%);
-            color: #fff;
-            min-height: 100vh;
-        }
-        .section {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 60px 40px;
-            text-align: center;
-            border-bottom: 1px solid #222;
-        }
-        .patent-banner {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(255,68,68,0.9);
-            color: #fff;
-            padding: 10px;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            z-index: 1000;
-            text-align: center;
-        }
-        .big-text {
-            font-size: clamp(32px, 6vw, 72px);
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 20px;
-        }
-        .huge-text {
-            font-size: clamp(48px, 10vw, 120px);
-            font-weight: 900;
-            line-height: 1;
-        }
-        .cyan { color: #00d4ff; text-shadow: 0 0 30px rgba(0,212,255,0.5); }
-        .red { color: #ff4444; text-shadow: 0 0 30px rgba(255,68,68,0.5); }
-        .green { color: #00ff88; text-shadow: 0 0 30px rgba(0,255,136,0.5); }
-        .gold { color: #ffd700; text-shadow: 0 0 30px rgba(255,215,0,0.5); }
-        .subtitle {
-            font-size: clamp(16px, 2vw, 24px);
-            color: #888;
-            max-width: 700px;
-            margin-bottom: 40px;
-        }
-        .features {
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin: 40px 0;
-            max-width: 1200px;
-        }
-        .feature {
-            background: rgba(0,212,255,0.1);
-            border: 1px solid rgba(0,212,255,0.3);
-            padding: 30px;
-            border-radius: 12px;
-            min-width: 280px;
-            max-width: 350px;
-            text-align: left;
-        }
-        .feature-icon { font-size: 40px; margin-bottom: 15px; }
-        .feature-title { font-size: 20px; font-weight: 700; color: #00d4ff; margin-bottom: 10px; }
-        .feature-desc { font-size: 14px; color: #aaa; line-height: 1.6; }
-        .workflow {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin: 40px 0;
-        }
-        .workflow-step {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid #333;
-            padding: 25px;
-            border-radius: 12px;
-            width: 180px;
-            text-align: center;
-        }
-        .workflow-num {
-            width: 40px;
-            height: 40px;
-            background: #00d4ff;
-            color: #000;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            margin: 0 auto 15px;
-        }
-        .workflow-title { font-weight: 700; margin-bottom: 8px; }
-        .workflow-desc { font-size: 12px; color: #888; }
-        .stats {
-            display: flex;
-            gap: 40px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin: 40px 0;
-        }
-        .stat {
-            text-align: center;
-        }
-        .stat-value {
-            font-size: 64px;
-            font-weight: 900;
-            color: #00ff88;
-        }
-        .stat-label {
-            font-size: 12px;
-            color: #888;
-            letter-spacing: 1px;
-        }
-        .use-cases {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin: 40px 0;
-        }
-        .use-case {
-            background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(0,255,136,0.1));
-            border: 1px solid rgba(0,212,255,0.3);
-            padding: 25px;
-            border-radius: 12px;
-            width: 200px;
-            text-align: center;
-        }
-        .use-case-icon { font-size: 48px; margin-bottom: 15px; }
-        .use-case-title { font-weight: 700; color: #fff; }
-        .cta-section {
-            background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(0,255,136,0.2));
-        }
-        .footer {
-            padding: 30px;
-            text-align: center;
-            color: #666;
-            font-size: 14px;
-        }
-    </style>
+<title>LCES - Likeness Consent & Enforcement System</title>
+<style>
+body{background:#111;color:#eee;font-family:Arial,sans-serif;padding:40px;max-width:800px;margin:0 auto;line-height:1.8}
+h1{color:#0cf;font-size:42px;text-align:center}
+h2{color:#0cf;margin-top:40px;border-bottom:1px solid #333;padding-bottom:10px}
+h3{color:#888}
+ul{margin:20px 0}
+li{margin:10px 0}
+.red{color:#f44}
+.green{color:#0f8}
+.cyan{color:#0cf}
+.box{background:#1a1a1a;padding:20px;border-radius:8px;margin:20px 0}
+.center{text-align:center}
+.stat{display:inline-block;margin:20px;text-align:center}
+.stat-num{font-size:48px;font-weight:bold;color:#0f8}
+.stat-label{font-size:12px;color:#888}
+.feature{background:#1a1a1a;padding:20px;border-radius:8px;margin:15px 0;border-left:3px solid #0cf}
+.feature-title{color:#0cf;font-weight:bold;font-size:18px}
+.banner{background:#f44;color:#fff;padding:10px;text-align:center;font-weight:bold;margin-bottom:30px}
+</style>
 </head>
 <body>
-    <div class="patent-banner">⚠️ PATENTS PENDING • FINAL BOSS TECHNOLOGY INC.</div>
+<div class="banner">⚠️ PATENTS PENDING - FINAL BOSS TECHNOLOGY INC.</div>
 
-    <div class="section">
-        <div class="huge-text cyan">LCES</div>
-        <div class="big-text">Likeness Consent & Enforcement System</div>
-        <p class="subtitle">Cryptographic consent infrastructure for AI-generated likenesses. Provable. Revocable. Auditable.</p>
-    </div>
+<h1>LCES</h1>
+<p class="center"><strong>Likeness Consent & Enforcement System</strong></p>
+<p class="center">Cryptographic consent infrastructure for AI-generated likenesses.<br>Provable. Revocable. Auditable.</p>
 
-    <div class="section">
-        <div class="big-text">The Problem with <span class="red">AI Likenesses</span></div>
-        <p class="subtitle">Studios, platforms, and creators are generating synthetic voices and faces at scale — but consent is still handled with PDFs and prayers.</p>
-        <p class="subtitle" style="color:#ff4444;">When disputes happen, who has proof?</p>
-    </div>
+<h2 class="red">The Problem</h2>
+<p>Studios, platforms, and creators are generating synthetic voices and faces at scale — but consent is still handled with PDFs and prayers.</p>
+<p class="red"><strong>When disputes happen, who has proof?</strong></p>
 
-    <div class="section">
-        <div class="big-text cyan">How LCES Works</div>
-        <div class="workflow">
-            <div class="workflow-step">
-                <div class="workflow-num">1</div>
-                <div class="workflow-title">Capture</div>
-                <div class="workflow-desc">Identity + liveness + intent verification</div>
-            </div>
-            <div class="workflow-step">
-                <div class="workflow-num">2</div>
-                <div class="workflow-title">Sign</div>
-                <div class="workflow-desc">Cryptographic consent artifact created</div>
-            </div>
-            <div class="workflow-step">
-                <div class="workflow-num">3</div>
-                <div class="workflow-title">Anchor</div>
-                <div class="workflow-desc">Immutable record on-chain</div>
-            </div>
-            <div class="workflow-step">
-                <div class="workflow-num">4</div>
-                <div class="workflow-title">Enforce</div>
-                <div class="workflow-desc">Real-time policy + revocation</div>
-            </div>
-        </div>
-    </div>
+<h2>How LCES Works</h2>
+<div class="box">
+<p><strong>1. Capture</strong> → Identity + liveness + intent verification</p>
+<p><strong>2. Sign</strong> → Cryptographic consent artifact created</p>
+<p><strong>3. Anchor</strong> → Immutable record on-chain</p>
+<p><strong>4. Enforce</strong> → Real-time policy + revocation</p>
+</div>
 
-    <div class="section">
-        <div class="big-text">Core <span class="cyan">Capabilities</span></div>
-        <div class="features">
-            <div class="feature">
-                <div class="feature-icon">🔐</div>
-                <div class="feature-title">Cryptographic Consent</div>
-                <div class="feature-desc">Consent bound to identity, liveness, and intent. Not just a checkbox — a verifiable artifact.</div>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">📜</div>
-                <div class="feature-title">Immutable Audit Trail</div>
-                <div class="feature-desc">Every consent, every generation, every usage event — logged with cryptographic receipts.</div>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">⚡</div>
-                <div class="feature-title">Fail-Closed Revocation</div>
-                <div class="feature-desc">When consent is revoked, downstream usage actually stops. Propagation acknowledgments ensure compliance.</div>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">🔍</div>
-                <div class="feature-title">Offline Verification</div>
-                <div class="feature-desc">Auditors and partners can verify consent independently — no dependency on our systems.</div>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">💰</div>
-                <div class="feature-title">Revenue Share Rails</div>
-                <div class="feature-desc">Usage metering and billing linkage built in. Dispute-proof royalty tracking.</div>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">🛡️</div>
-                <div class="feature-title">Hybrid PQC Signing</div>
-                <div class="feature-desc">Future-proof with post-quantum cryptography options for long-term audit validity.</div>
-            </div>
-        </div>
-    </div>
+<h2>Core Capabilities</h2>
 
-    <div class="section">
-        <div class="big-text">Use Cases</div>
-        <div class="use-cases">
-            <div class="use-case">
-                <div class="use-case-icon">🎤</div>
-                <div class="use-case-title">Voice Cloning</div>
-            </div>
-            <div class="use-case">
-                <div class="use-case-icon">🎬</div>
-                <div class="use-case-title">Film & TV</div>
-            </div>
-            <div class="use-case">
-                <div class="use-case-icon">🎮</div>
-                <div class="use-case-title">Gaming</div>
-            </div>
-            <div class="use-case">
-                <div class="use-case-icon">📱</div>
-                <div class="use-case-title">Social Media</div>
-            </div>
-            <div class="use-case">
-                <div class="use-case-icon">🏛️</div>
-                <div class="use-case-title">Estate Licensing</div>
-            </div>
-        </div>
-    </div>
+<div class="feature">
+<div class="feature-title">🔐 Cryptographic Consent</div>
+<p>Consent bound to identity, liveness, and intent. Not just a checkbox — a verifiable artifact.</p>
+</div>
 
-    <div class="section">
-        <div class="big-text green">Why It Matters</div>
-        <div class="stats">
-            <div class="stat">
-                <div class="stat-value">47</div>
-                <div class="stat-label">STATES WITH AI LIKENESS LAWS</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">$500M+</div>
-                <div class="stat-label">DEEPFAKE DAMAGES (2025)</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">0</div>
-                <div class="stat-label">CURRENT CONSENT STANDARDS</div>
-            </div>
-        </div>
-        <p class="subtitle">Regulation is coming. Be ready.</p>
-    </div>
+<div class="feature">
+<div class="feature-title">📜 Immutable Audit Trail</div>
+<p>Every consent, every generation, every usage event — logged with cryptographic receipts.</p>
+</div>
 
-    <div class="section cta-section">
-        <div class="big-text">Consent Infrastructure</div>
-        <div class="big-text gold">That Actually Works.</div>
-        <p class="subtitle">SAG-AFTRA ready. Enterprise grade. Patent pending.</p>
-    </div>
+<div class="feature">
+<div class="feature-title">⚡ Fail-Closed Revocation</div>
+<p>When consent is revoked, downstream usage actually stops. Propagation acknowledgments ensure compliance.</p>
+</div>
 
-    <div class="footer">
-        <p style="color:#ff4444;font-weight:700;">⚠️ PATENTS PENDING</p>
-        <p>© 2026 Final Boss Technology Inc.</p>
-    </div>
+<div class="feature">
+<div class="feature-title">🔍 Offline Verification</div>
+<p>Auditors and partners can verify consent independently — no dependency on our systems.</p>
+</div>
+
+<div class="feature">
+<div class="feature-title">💰 Revenue Share Rails</div>
+<p>Usage metering and billing linkage built in. Dispute-proof royalty tracking.</p>
+</div>
+
+<div class="feature">
+<div class="feature-title">🛡️ Hybrid PQC Signing</div>
+<p>Future-proof with post-quantum cryptography options for long-term audit validity.</p>
+</div>
+
+<h2>Use Cases</h2>
+<p>🎤 Voice Cloning &nbsp;|&nbsp; 🎬 Film & TV &nbsp;|&nbsp; 🎮 Gaming &nbsp;|&nbsp; 📱 Social Media &nbsp;|&nbsp; 🏛️ Estate Licensing</p>
+
+<h2 class="green">Why It Matters</h2>
+<div class="center">
+<div class="stat"><div class="stat-num">47</div><div class="stat-label">STATES WITH AI LAWS</div></div>
+<div class="stat"><div class="stat-num">$500M+</div><div class="stat-label">DEEPFAKE DAMAGES</div></div>
+</div>
+<p class="center"><strong>Regulation is coming. Be ready.</strong></p>
+
+<h2 class="cyan center">Consent Infrastructure That Actually Works.</h2>
+<p class="center">SAG-AFTRA ready. Enterprise grade. Patent pending.</p>
+
+<div class="banner">⚠️ PATENTS PENDING - FINAL BOSS TECHNOLOGY INC.</div>
 </body>
 </html>

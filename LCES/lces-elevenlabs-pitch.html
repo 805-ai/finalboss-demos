@@ -1,267 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LCES for ElevenLabs - Final Boss Technology</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body { 
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(180deg, #0a0a1a 0%, #000 100%);
-            color: #fff;
-            min-height: 100vh;
-        }
-        .section {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 60px 40px;
-            text-align: center;
-            border-bottom: 1px solid #222;
-        }
-        .patent-banner {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(255,68,68,0.9);
-            color: #fff;
-            padding: 10px;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            z-index: 1000;
-            text-align: center;
-        }
-        .big-text {
-            font-size: clamp(32px, 6vw, 72px);
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 20px;
-        }
-        .cyan { color: #00d4ff; text-shadow: 0 0 30px rgba(0,212,255,0.5); }
-        .red { color: #ff4444; text-shadow: 0 0 30px rgba(255,68,68,0.5); }
-        .green { color: #00ff88; text-shadow: 0 0 30px rgba(0,255,136,0.5); }
-        .subtitle {
-            font-size: clamp(16px, 2vw, 24px);
-            color: #888;
-            max-width: 600px;
-            margin-bottom: 40px;
-        }
-        .stats {
-            display: flex;
-            gap: 40px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin: 40px 0;
-        }
-        .stat {
-            background: rgba(255,68,68,0.15);
-            border: 1px solid rgba(255,68,68,0.4);
-            padding: 30px 40px;
-            border-radius: 12px;
-        }
-        .stat-value {
-            font-size: 48px;
-            font-weight: 900;
-            color: #ff4444;
-        }
-        .stat-label {
-            font-size: 11px;
-            color: #888;
-            letter-spacing: 1px;
-            margin-top: 8px;
-        }
-        .list {
-            text-align: left;
-            max-width: 700px;
-        }
-        .list-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 20px 24px;
-            margin-bottom: 12px;
-            border-radius: 8px;
-            font-size: 18px;
-        }
-        .list-item.problem {
-            background: rgba(255,68,68,0.1);
-            border-left: 4px solid #ff4444;
-        }
-        .list-item.solution {
-            background: rgba(0,212,255,0.1);
-            border-left: 4px solid #00d4ff;
-        }
-        .list-item .icon { font-size: 28px; }
-        .comparison {
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 40px;
-        }
-        .compare-box {
-            padding: 30px;
-            border-radius: 12px;
-            min-width: 300px;
-            text-align: left;
-        }
-        .compare-box.bad {
-            background: rgba(255,68,68,0.1);
-            border: 2px solid #ff4444;
-        }
-        .compare-box.good {
-            background: rgba(0,255,136,0.1);
-            border: 2px solid #00ff88;
-        }
-        .compare-box h3 {
-            font-size: 20px;
-            margin-bottom: 20px;
-        }
-        .compare-box.bad h3 { color: #ff4444; }
-        .compare-box.good h3 { color: #00ff88; }
-        .compare-box ul { list-style: none; }
-        .compare-box li {
-            padding: 8px 0;
-            font-size: 16px;
-            color: #ccc;
-        }
-        .code-block {
-            background: #0d1117;
-            border: 1px solid #30363d;
-            border-radius: 8px;
-            padding: 24px;
-            text-align: left;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            color: #00ff88;
-            max-width: 600px;
-            margin: 30px auto;
-            overflow-x: auto;
-        }
-        .cta-section {
-            background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(0,255,136,0.2));
-        }
-        .footer {
-            padding: 30px;
-            text-align: center;
-            color: #666;
-            font-size: 14px;
-        }
-    </style>
+<title>LCES for ElevenLabs</title>
+<style>
+body{background:#111;color:#eee;font-family:Arial,sans-serif;padding:40px;max-width:800px;margin:0 auto;line-height:1.8}
+h1{color:#0cf;font-size:36px}
+h2{color:#0cf;margin-top:40px;border-bottom:1px solid #333;padding-bottom:10px}
+h3{color:#f44}
+ul{margin:20px 0}
+li{margin:10px 0}
+.red{color:#f44}
+.green{color:#0f8}
+.box{background:#1a1a1a;padding:20px;border-radius:8px;margin:20px 0}
+.stat{display:inline-block;margin:20px;text-align:center}
+.stat-num{font-size:48px;font-weight:bold;color:#f44}
+.stat-label{font-size:12px;color:#888}
+code{background:#000;padding:15px;display:block;border-radius:5px;color:#0f8;margin:20px 0;overflow-x:auto}
+.banner{background:#f44;color:#fff;padding:10px;text-align:center;font-weight:bold;margin-bottom:30px}
+</style>
 </head>
 <body>
-    <div class="patent-banner">⚠️ PATENTS PENDING • FINAL BOSS TECHNOLOGY INC.</div>
+<div class="banner">⚠️ PATENTS PENDING - FINAL BOSS TECHNOLOGY INC.</div>
 
-    <div class="section">
-        <div class="big-text">ElevenLabs is <span class="cyan">THE BEST</span></div>
-        <div class="big-text">voice cloning platform.</div>
-        <p class="subtitle">But there's a problem.</p>
-    </div>
+<h1>LCES for ElevenLabs</h1>
+<p>Consent Infrastructure for Voice Licensing</p>
 
-    <div class="section">
-        <div class="big-text red">THE RISK</div>
-        <p class="subtitle">Every cloned voice is a potential lawsuit.</p>
-        <div class="stats">
-            <div class="stat">
-                <div class="stat-value">$500M+</div>
-                <div class="stat-label">DEEPFAKE DAMAGES (2025)</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">47</div>
-                <div class="stat-label">STATES WITH AI LAWS</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">∞</div>
-                <div class="stat-label">REPUTATION RISK</div>
-            </div>
-        </div>
-    </div>
+<h2 class="red">THE RISK</h2>
+<p>Every cloned voice is a potential lawsuit.</p>
 
-    <div class="section">
-        <div class="big-text red">YOUR CHALLENGES</div>
-        <p class="subtitle">Without consent infrastructure:</p>
-        <div class="list">
-            <div class="list-item problem"><span class="icon">⚖️</span> No proof of consent if sued by voice owners</div>
-            <div class="list-item problem"><span class="icon">🏢</span> Enterprise clients won't adopt without compliance</div>
-            <div class="list-item problem"><span class="icon">🔓</span> Can't detect when clones are misused</div>
-            <div class="list-item problem"><span class="icon">📋</span> No audit trail for regulators</div>
-        </div>
-    </div>
+<div class="stat"><div class="stat-num">$500M+</div><div class="stat-label">DEEPFAKE DAMAGES (2025)</div></div>
+<div class="stat"><div class="stat-num">47</div><div class="stat-label">STATES WITH AI LAWS</div></div>
 
-    <div class="section">
-        <div class="big-text cyan">THE SOLUTION</div>
-        <div class="big-text" style="font-size:clamp(40px,8vw,96px);">LCES</div>
-        <p class="subtitle">Likeness Consent & Enforcement System<br>The consent layer your platform needs.</p>
-    </div>
+<h3>Your Challenges (Without Consent Infrastructure)</h3>
+<ul>
+<li>⚖️ No proof of consent if sued by voice owners</li>
+<li>🏢 Enterprise clients won't adopt without compliance</li>
+<li>🔓 Can't detect when clones are misused</li>
+<li>📋 No audit trail for regulators</li>
+</ul>
 
-    <div class="section">
-        <div class="big-text cyan">WHAT YOU GET</div>
-        <p class="subtitle">With LCES integrated:</p>
-        <div class="list">
-            <div class="list-item solution"><span class="icon">🔐</span> Cryptographic proof of consent for every voice</div>
-            <div class="list-item solution"><span class="icon">🔍</span> Real-time detection of unauthorized clones</div>
-            <div class="list-item solution"><span class="icon">📜</span> Immutable audit trail for compliance</div>
-            <div class="list-item solution"><span class="icon">🏆</span> Enterprise-ready consent infrastructure</div>
-        </div>
-    </div>
+<h2>THE SOLUTION: LCES</h2>
+<p><strong>Likeness Consent & Enforcement System</strong> — the consent layer your platform needs.</p>
 
-    <div class="section">
-        <div class="big-text">THE DIFFERENCE</div>
-        <div class="comparison">
-            <div class="compare-box bad">
-                <h3>❌ WITHOUT LCES</h3>
-                <ul>
-                    <li>✗ Hope users consented</li>
-                    <li>✗ No misuse detection</li>
-                    <li>✗ Liability on you</li>
-                    <li>✗ Enterprise won't touch it</li>
-                    <li>✗ Regulators asking questions</li>
-                </ul>
-            </div>
-            <div class="compare-box good">
-                <h3>✓ WITH LCES</h3>
-                <ul>
-                    <li>✓ Verified consent on-chain</li>
-                    <li>✓ Real-time violation alerts</li>
-                    <li>✓ Protected from liability</li>
-                    <li>✓ Enterprise clients onboard</li>
-                    <li>✓ Compliance documentation</li>
-                </ul>
-            </div>
-        </div>
-    </div>
+<h3 class="green">What You Get</h3>
+<ul>
+<li>🔐 Cryptographic proof of consent for every voice</li>
+<li>🔍 Real-time detection of unauthorized clones</li>
+<li>📜 Immutable audit trail for compliance</li>
+<li>⚡ Fail-closed revocation that actually propagates</li>
+<li>💰 Revenue-share rails with dispute-proof billing</li>
+</ul>
 
-    <div class="section">
-        <div class="big-text cyan">EASY INTEGRATION</div>
-        <p class="subtitle">One API call. Full protection.</p>
-        <div class="code-block">
-const consent = await lces.verify({<br>
-&nbsp;&nbsp;voiceId: "voice_abc123",<br>
-&nbsp;&nbsp;userId: "user_xyz789",<br>
-&nbsp;&nbsp;useCase: "commercial"<br>
-});<br><br>
-if (consent.verified) {<br>
-&nbsp;&nbsp;// Proceed with voice generation<br>
-}
-        </div>
-        <p style="color:#666;font-size:14px;">SDK Available: JavaScript • Python • Go • REST API</p>
-    </div>
+<h2>THE DIFFERENCE</h2>
+<div class="box">
+<h3 class="red">❌ WITHOUT LCES</h3>
+<ul>
+<li>Hope users consented</li>
+<li>No misuse detection</li>
+<li>Liability on you</li>
+<li>Enterprise won't touch it</li>
+</ul>
+</div>
 
-    <div class="section cta-section">
-        <div class="big-text">Make ElevenLabs</div>
-        <div class="big-text green">lawsuit-proof.</div>
-        <p class="subtitle">Consent infrastructure that scales with you.</p>
-    </div>
+<div class="box">
+<h3 class="green">✓ WITH LCES</h3>
+<ul>
+<li>Verified consent on-chain</li>
+<li>Real-time violation alerts</li>
+<li>Protected from liability</li>
+<li>Enterprise clients onboard</li>
+</ul>
+</div>
 
-    <div class="footer">
-        <p style="color:#ff4444;font-weight:700;">⚠️ PATENTS PENDING</p>
-        <p>© 2026 Final Boss Technology Inc.</p>
-    </div>
+<h2>EASY INTEGRATION</h2>
+<p>One API call. Full protection.</p>
+<code>const consent = await lces.verify({
+  voiceId: "voice_abc123",
+  userId: "user_xyz789",
+  useCase: "commercial"
+});
+
+if (consent.verified) {
+  // Proceed with voice generation
+}</code>
+<p><small>SDK Available: JavaScript • Python • Go • REST API</small></p>
+
+<h2 class="green">Make ElevenLabs Lawsuit-Proof</h2>
+<p>Consent infrastructure that scales with you.</p>
+
+<div class="banner">⚠️ PATENTS PENDING - FINAL BOSS TECHNOLOGY INC.</div>
 </body>
 </html>
