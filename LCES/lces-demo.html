@@ -1,751 +1,291 @@
 <!DOCTYPE html>
-<html lang="en" style="background:#000;">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LCES - Interactive Demo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <title>LCES - Likeness Consent & Enforcement System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
+        html { scroll-behavior: smooth; }
         body { 
-            font-family: 'Inter', sans-serif; 
-            background: #000; 
-            color: #fff; 
-            overflow: hidden; 
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, #0a0a1a 0%, #000 100%);
+            color: #fff;
+            min-height: 100vh;
         }
-
-        .mono { font-family: 'JetBrains Mono', monospace; }
-
-        .demo-container { 
-            width: 100vw; 
-            height: 100vh; 
-            position: relative;
-            background: radial-gradient(ellipse at center, #001a1a 0%, #000 100%);
+        .section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            text-align: center;
+            border-bottom: 1px solid #222;
         }
-
-        /* Grid Background */
-        .grid-bg {
-            position: absolute;
+        .patent-banner {
+            position: fixed;
             top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                linear-gradient(rgba(0, 212, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 212, 255, 0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
-            animation: gridMove 20s linear infinite;
-        }
-
-        @keyframes gridMove {
-            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
-            100% { transform: perspective(500px) rotateX(60deg) translateY(40px); }
-        }
-
-        .scene { 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            opacity: 1; 
-            transition: opacity 1s ease-in-out;
-            z-index: 10;
-        }
-
-        .scene.active { opacity: 1; }
-
-        /* Cyber text effect */
-        .cyber-text {
-            color: #00d4ff;
-            text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 40px #00d4ff;
-        }
-
-        .warning-text {
-            color: #ff4444;
-            text-shadow: 0 0 10px #ff4444, 0 0 20px #ff4444;
-        }
-
-        .success-text {
-            color: #00ff88;
-            text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88;
-        }
-
-        /* Scene 1: The Problem */
-        .problem-visual {
+            width: 100%;
+            background: rgba(255,68,68,0.9);
+            color: #fff;
+            padding: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            z-index: 1000;
             text-align: center;
         }
-
-        .headline {
-            font-size: 6vw;
+        .big-text {
+            font-size: clamp(32px, 6vw, 72px);
             font-weight: 900;
             line-height: 1.1;
-            animation: glitchIn 1s ease;
+            margin-bottom: 20px;
         }
-
-        .sub-headline {
-            font-size: 1.5vw;
-            color: #666;
-            margin-top: 24px;
-            letter-spacing: 0.3em;
+        .huge-text {
+            font-size: clamp(48px, 10vw, 120px);
+            font-weight: 900;
+            line-height: 1;
         }
-
-        /* Scene 2: Voice Cloning Problem */
-        .clone-visual {
+        .cyan { color: #00d4ff; text-shadow: 0 0 30px rgba(0,212,255,0.5); }
+        .red { color: #ff4444; text-shadow: 0 0 30px rgba(255,68,68,0.5); }
+        .green { color: #00ff88; text-shadow: 0 0 30px rgba(0,255,136,0.5); }
+        .gold { color: #ffd700; text-shadow: 0 0 30px rgba(255,215,0,0.5); }
+        .subtitle {
+            font-size: clamp(16px, 2vw, 24px);
+            color: #888;
+            max-width: 700px;
+            margin-bottom: 40px;
+        }
+        .features {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 40px 0;
+            max-width: 1200px;
+        }
+        .feature {
+            background: rgba(0,212,255,0.1);
+            border: 1px solid rgba(0,212,255,0.3);
+            padding: 30px;
+            border-radius: 12px;
+            min-width: 280px;
+            max-width: 350px;
+            text-align: left;
+        }
+        .feature-icon { font-size: 40px; margin-bottom: 15px; }
+        .feature-title { font-size: 20px; font-weight: 700; color: #00d4ff; margin-bottom: 10px; }
+        .feature-desc { font-size: 14px; color: #aaa; line-height: 1.6; }
+        .workflow {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 40px 0;
+        }
+        .workflow-step {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid #333;
+            padding: 25px;
+            border-radius: 12px;
+            width: 180px;
             text-align: center;
         }
-
-        .waveform {
+        .workflow-num {
+            width: 40px;
+            height: 40px;
+            background: #00d4ff;
+            color: #000;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 4px;
-            height: 100px;
-            margin: 32px 0;
+            font-weight: 900;
+            margin: 0 auto 15px;
         }
-
-        .wave-bar {
-            width: 6px;
-            background: linear-gradient(to top, #ff4444, #ff8888);
-            border-radius: 3px;
-            animation: waveAnim 0.6s ease-in-out infinite;
+        .workflow-title { font-weight: 700; margin-bottom: 8px; }
+        .workflow-desc { font-size: 12px; color: #888; }
+        .stats {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 40px 0;
         }
-
-        .clone-warning {
-            display: inline-block;
-            padding: 16px 32px;
-            background: rgba(255, 68, 68, 0.2);
-            border: 2px solid #ff4444;
-            font-size: 1.2vw;
-            letter-spacing: 0.2em;
-            animation: blink 1s ease infinite;
-        }
-
-        /* Scene 3: The Solution */
-        .solution-box {
-            max-width: 800px;
+        .stat {
             text-align: center;
         }
-
-        .lces-logo {
-            font-size: 8vw;
+        .stat-value {
+            font-size: 64px;
             font-weight: 900;
-            letter-spacing: 0.1em;
-            animation: logoReveal 1.5s ease;
+            color: #00ff88;
         }
-
-        .lces-tagline {
-            font-size: 1.5vw;
+        .stat-label {
+            font-size: 12px;
             color: #888;
-            margin-top: 16px;
-            letter-spacing: 0.4em;
+            letter-spacing: 1px;
         }
-
-        /* Scene 4: Consent Flow */
-        .consent-flow {
+        .use-cases {
             display: flex;
-            align-items: center;
-            gap: 32px;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 40px 0;
         }
-
-        .flow-step {
+        .use-case {
+            background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(0,255,136,0.1));
+            border: 1px solid rgba(0,212,255,0.3);
+            padding: 25px;
+            border-radius: 12px;
             width: 200px;
-            padding: 24px;
-            background: rgba(0, 212, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            border-radius: 8px;
-            text-align: center;
-            animation: stepPop 0.5s ease forwards;
-            opacity: 1;
-            transform: scale(0.8);
-        }
-
-        .flow-step:nth-child(1) { animation-delay: 0.2s; }
-        .flow-step:nth-child(2) { animation-delay: 0.4s; }
-        .flow-step:nth-child(3) { animation-delay: 0.6s; }
-        .flow-step:nth-child(4) { animation-delay: 0.8s; }
-        .flow-step:nth-child(5) { animation-delay: 1s; }
-
-        .flow-icon {
-            font-size: 48px;
-            margin-bottom: 16px;
-        }
-
-        .flow-label {
-            font-size: 12px;
-            color: #00d4ff;
-            letter-spacing: 0.1em;
-        }
-
-        .flow-arrow {
-            font-size: 24px;
-            color: #00d4ff;
-            animation: arrowPulse 1s ease infinite;
-        }
-
-        /* Scene 5: Verification */
-        .verify-visual {
             text-align: center;
         }
-
-        .verify-box {
-            width: 500px;
-            padding: 32px;
-            background: #0a0a0a;
-            border: 2px solid #00d4ff;
-            border-radius: 8px;
-            box-shadow: 0 0 40px rgba(0, 212, 255, 0.3);
+        .use-case-icon { font-size: 48px; margin-bottom: 15px; }
+        .use-case-title { font-weight: 700; color: #fff; }
+        .cta-section {
+            background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(0,255,136,0.2));
         }
-
-        .verify-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid #222;
-        }
-
-        .verify-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            background: rgba(0, 255, 136, 0.2);
-            border: 1px solid #00ff88;
-            border-radius: 4px;
-            font-size: 12px;
-            color: #00ff88;
-        }
-
-        .verify-dot {
-            width: 8px;
-            height: 8px;
-            background: #00ff88;
-            border-radius: 50%;
-            animation: dotPulse 1s ease infinite;
-        }
-
-        .verify-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #1a1a1a;
+        .footer {
+            padding: 30px;
+            text-align: center;
+            color: #666;
             font-size: 14px;
-        }
-
-        .verify-label {
-            color: #666;
-        }
-
-        .verify-value {
-            color: #fff;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        /* Scene 6: Detection */
-        .detect-visual {
-            text-align: center;
-        }
-
-        .detect-scanner {
-            width: 400px;
-            height: 200px;
-            background: #0a0a0a;
-            border: 2px solid #ff4444;
-            border-radius: 8px;
-            position: relative;
-            overflow: hidden;
-            margin: 24px auto;
-        }
-
-        .scan-line-detect {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, #ff4444, transparent);
-            animation: scanVertical 2s linear infinite;
-        }
-
-        @keyframes scanVertical {
-            0% { top: 0; }
-            100% { top: 100%; }
-        }
-
-        .detect-result {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 24px;
-            font-weight: 700;
-            animation: resultPop 0.5s ease 2s forwards;
-            opacity: 1;
-        }
-
-        /* Scene 7: Audit Trail */
-        .audit-visual {
-            width: 90%;
-            max-width: 700px;
-        }
-
-        .audit-log {
-            background: #0a0a0a;
-            border: 1px solid #333;
-            border-radius: 8px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 12px;
-            overflow: hidden;
-        }
-
-        .audit-header {
-            padding: 12px 16px;
-            background: #111;
-            border-bottom: 1px solid #333;
-            color: #00d4ff;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .audit-entry {
-            padding: 12px 16px;
-            border-bottom: 1px solid #1a1a1a;
-            display: flex;
-            gap: 16px;
-            animation: logEntry 0.3s ease forwards;
-            opacity: 1;
-        }
-
-        .audit-entry:nth-child(2) { animation-delay: 0.3s; }
-        .audit-entry:nth-child(3) { animation-delay: 0.6s; }
-        .audit-entry:nth-child(4) { animation-delay: 0.9s; }
-        .audit-entry:nth-child(5) { animation-delay: 1.2s; }
-
-        .audit-time {
-            color: #666;
-            min-width: 100px;
-        }
-
-        .audit-action {
-            color: #00ff88;
-            min-width: 120px;
-        }
-
-        .audit-hash {
-            color: #00d4ff;
-        }
-
-        /* Scene 8: Final */
-        .final-cta {
-            text-align: center;
-        }
-
-        .final-headline {
-            font-size: 5vw;
-            font-weight: 900;
-            margin-bottom: 24px;
-        }
-
-        .final-sub {
-            font-size: 1.5vw;
-            color: #666;
-            letter-spacing: 0.3em;
-            margin-bottom: 48px;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 20px 48px;
-            background: linear-gradient(135deg, #00d4ff, #00ff88);
-            color: #000;
-            font-weight: 700;
-            font-size: 16px;
-            letter-spacing: 0.1em;
-            border: none;
-            cursor: pointer;
-            animation: ctaFloat 3s ease-in-out infinite;
-        }
-
-        /* Animations */
-        @keyframes glitchIn {
-            0% { opacity: 1; transform: translateX(-20px); filter: blur(10px); }
-            50% { opacity: 1; transform: translateX(10px); }
-            100% { transform: translateX(0); filter: blur(0); }
-        }
-
-        @keyframes waveAnim {
-            0%, 100% { height: 20px; }
-            50% { height: var(--wave-height, 80px); }
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        @keyframes logoReveal {
-            0% { opacity: 1; transform: scale(0.5); filter: blur(20px); }
-            100% { opacity: 1; transform: scale(1); filter: blur(0); }
-        }
-
-        @keyframes stepPop {
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        @keyframes arrowPulse {
-            0%, 100% { opacity: 0.5; transform: translateX(0); }
-            50% { opacity: 1; transform: translateX(5px); }
-        }
-
-        @keyframes dotPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        @keyframes resultPop {
-            to { opacity: 1; }
-        }
-
-        @keyframes logEntry {
-            to { opacity: 1; }
-        }
-
-        @keyframes ctaFloat {
-            0%, 100% { transform: translateY(0); box-shadow: 0 10px 40px rgba(0, 212, 255, 0.3); }
-            50% { transform: translateY(-5px); box-shadow: 0 20px 60px rgba(0, 212, 255, 0.5); }
-        }
-
-        /* Progress Bar */
-        .progress-bar { 
-            position: fixed; 
-            bottom: 0; 
-            left: 0; 
-            height: 3px; 
-            background: linear-gradient(90deg, #00d4ff, #00ff88); 
-            width: 0%; 
-            transition: width 0.1s linear;
-            z-index: 100;
-        }
-
-        /* Scene Label */
-        .scene-label {
-            position: absolute;
-            top: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 11px;
-            color: #00d4ff;
-            letter-spacing: 0.4em;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        /* Controls */
-        .controls { 
-            position: fixed; 
-            bottom: 20px; 
-            right: 20px; 
-            display: flex; 
-            gap: 10px; 
-            z-index: 1000; 
-        }
-        .controls button { 
-            padding: 8px 16px; 
-            background: rgba(0, 212, 255, 0.1); 
-            border: 1px solid rgba(0, 212, 255, 0.3); 
-            color: #00d4ff; 
-            cursor: pointer; 
-            font-size: 11px;
-            letter-spacing: 0.1em;
-            font-family: 'JetBrains Mono', monospace;
-            transition: all 0.3s;
-        }
-        .controls button:hover { 
-            background: #00d4ff; 
-            color: #000; 
         }
     </style>
 </head>
 <body>
-    <div class="demo-container">
-        <div class="grid-bg"></div>
+    <div class="patent-banner">⚠️ PATENTS PENDING • FINAL BOSS TECHNOLOGY INC.</div>
 
-        <!-- PATENTS PENDING WATERMARK -->
-        <div style="position: fixed; top: 20px; left: 20px; z-index: 999; font-size: 13px; font-family: monospace; letter-spacing: 0.15em; color: #ff0000; text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000; font-weight: bold;">
-            ⚠️ PATENTS PENDING
-        </div>
-        <div style="position: fixed; top: 20px; right: 20px; z-index: 999; font-size: 11px; font-family: monospace; letter-spacing: 0.1em; color: #00d4ff; text-shadow: 0 0 5px rgba(0,212,255,0.5);">
-            FINAL BOSS TECHNOLOGY INC.
-        </div>
-        <div style="position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); z-index: 999; font-size: 10px; font-family: monospace; letter-spacing: 0.2em; color: #ff0000; text-shadow: 0 0 10px #ff0000; text-align: center; background: rgba(0,0,0,0.7); padding: 8px 16px; border: 1px solid #ff0000;">
-            ⚠️ PATENTS PENDING • FINAL BOSS TECHNOLOGY INC. ⚠️
-        </div>
-
-        <!-- Scene 1: The Problem -->
-        <div class="scene active" data-duration="5000">
-            <div class="scene-label">THE PROBLEM</div>
-            <div class="problem-visual">
-                <div class="headline">
-                    <span class="warning-text">AI VOICE CLONING</span><br>
-                    <span style="color: #fff;">IS EXPLODING</span>
-                </div>
-                <div class="sub-headline">AND THERE'S NO CONSENT INFRASTRUCTURE</div>
-            </div>
-        </div>
-
-        <!-- Scene 2: Voice Cloning Chaos -->
-        <div class="scene" data-duration="5000">
-            <div class="scene-label">UNAUTHORIZED CLONING</div>
-            <div class="clone-visual">
-                <div style="font-size: 3vw; color: #fff; margin-bottom: 16px;">Anyone can clone a voice in</div>
-                <div style="font-size: 8vw; font-weight: 900;" class="warning-text">30 SECONDS</div>
-                <div class="waveform" id="waveform1"></div>
-                <div class="clone-warning mono">⚠️ NO CONSENT REQUIRED ⚠️</div>
-            </div>
-        </div>
-
-        <!-- Scene 3: The Solution -->
-        <div class="scene" data-duration="5000">
-            <div class="scene-label">THE SOLUTION</div>
-            <div class="solution-box">
-                <div class="lces-logo cyber-text">LCES</div>
-                <div class="lces-tagline">LIKENESS CONSENT & ENFORCEMENT SYSTEM</div>
-                <div style="margin-top: 32px; font-size: 1.2vw; color: #666;">
-                    Blockchain-anchored consent. Immutable audit trails. Real-time enforcement.
-                </div>
-            </div>
-        </div>
-
-        <!-- Scene 4: Consent Flow -->
-        <div class="scene" data-duration="7000">
-            <div class="scene-label">CONSENT FLOW</div>
-            <div class="consent-flow">
-                <div class="flow-step">
-                    <div class="flow-icon">👤</div>
-                    <div class="flow-label">IDENTITY</div>
-                </div>
-                <div class="flow-arrow">→</div>
-                <div class="flow-step">
-                    <div class="flow-icon">🎙️</div>
-                    <div class="flow-label">VOICE SAMPLE</div>
-                </div>
-                <div class="flow-arrow">→</div>
-                <div class="flow-step">
-                    <div class="flow-icon">✍️</div>
-                    <div class="flow-label">CONSENT</div>
-                </div>
-                <div class="flow-arrow">→</div>
-                <div class="flow-step">
-                    <div class="flow-icon">🔐</div>
-                    <div class="flow-label">BLOCKCHAIN</div>
-                </div>
-                <div class="flow-arrow">→</div>
-                <div class="flow-step">
-                    <div class="flow-icon">✅</div>
-                    <div class="flow-label">VERIFIED</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Scene 5: Verification -->
-        <div class="scene" data-duration="6000">
-            <div class="scene-label">REAL-TIME VERIFICATION</div>
-            <div class="verify-visual">
-                <div class="verify-box">
-                    <div class="verify-header">
-                        <span class="mono" style="color: #fff;">CONSENT RECORD</span>
-                        <div class="verify-status">
-                            <div class="verify-dot"></div>
-                            VERIFIED
-                        </div>
-                    </div>
-                    <div class="verify-row">
-                        <span class="verify-label">Identity</span>
-                        <span class="verify-value">John Smith (verified)</span>
-                    </div>
-                    <div class="verify-row">
-                        <span class="verify-label">Voice ID</span>
-                        <span class="verify-value">VID-2026-00847</span>
-                    </div>
-                    <div class="verify-row">
-                        <span class="verify-label">Consent Type</span>
-                        <span class="verify-value">Commercial Use</span>
-                    </div>
-                    <div class="verify-row">
-                        <span class="verify-label">Valid Until</span>
-                        <span class="verify-value">2027-01-24</span>
-                    </div>
-                    <div class="verify-row">
-                        <span class="verify-label">Blockchain TX</span>
-                        <span class="verify-value" style="color: #00d4ff;">0x8f3a...c721</span>
-                    </div>
-                    <div class="verify-row" style="border: none;">
-                        <span class="verify-label">Verification</span>
-                        <span class="verify-value" style="color: #00ff88;">&lt; 50ms</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Scene 6: Detection -->
-        <div class="scene" data-duration="6000">
-            <div class="scene-label">DEEPFAKE DETECTION</div>
-            <div class="detect-visual">
-                <div style="font-size: 2vw; color: #fff; margin-bottom: 16px;">Scanning for unauthorized usage...</div>
-                <div class="detect-scanner">
-                    <div class="scan-line-detect"></div>
-                    <div class="detect-result warning-text">⚠️ UNAUTHORIZED CLONE DETECTED</div>
-                </div>
-                <div style="font-size: 1.2vw; color: #ff4444; margin-top: 16px;">
-                    Real-time monitoring. Instant alerts. Evidence collection.
-                </div>
-            </div>
-        </div>
-
-        <!-- Scene 7: Audit Trail -->
-        <div class="scene" data-duration="6000">
-            <div class="scene-label">IMMUTABLE AUDIT TRAIL</div>
-            <div class="audit-visual">
-                <div class="audit-log">
-                    <div class="audit-header">
-                        <span>CONSENT_AUDIT_LOG</span>
-                        <span style="color: #00ff88;">● LIVE</span>
-                    </div>
-                    <div class="audit-entry">
-                        <span class="audit-time">14:23:01</span>
-                        <span class="audit-action">CONSENT_GRANTED</span>
-                        <span class="audit-hash">0x8f3a...c721</span>
-                    </div>
-                    <div class="audit-entry">
-                        <span class="audit-time">14:23:45</span>
-                        <span class="audit-action">VOICE_CLONED</span>
-                        <span class="audit-hash">0x2b7c...a892</span>
-                    </div>
-                    <div class="audit-entry">
-                        <span class="audit-time">15:02:17</span>
-                        <span class="audit-action">USAGE_LOGGED</span>
-                        <span class="audit-hash">0x9d4e...f103</span>
-                    </div>
-                    <div class="audit-entry">
-                        <span class="audit-time">18:47:33</span>
-                        <span class="audit-action" style="color: #ff4444;">VIOLATION_DETECTED</span>
-                        <span class="audit-hash">0x1a5f...b294</span>
-                    </div>
-                    <div class="audit-entry">
-                        <span class="audit-time">18:47:34</span>
-                        <span class="audit-action" style="color: #00d4ff;">ALERT_SENT</span>
-                        <span class="audit-hash">0x7c2d...e817</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Scene 8: Final -->
-        <div class="scene" data-duration="6000">
-            <div class="scene-label">YOUR MOVE</div>
-            <div class="final-cta">
-                <div class="final-headline">
-                    <span style="color: #fff;">CONSENT.</span>
-                    <span class="cyber-text">VERIFIED.</span>
-                </div>
-                <div class="final-sub">THE INFRASTRUCTURE LAYER FOR ETHICAL AI VOICE</div>
-                <button class="cta-button">REQUEST ACCESS</button>
-                <div style="margin-top: 32px; font-size: 12px; color: #ff0000; text-shadow: 0 0 10px #ff0000;">
-                    ⚠️ PATENTS PENDING • FINAL BOSS TECHNOLOGY INC.
-                </div>
-            </div>
-        </div>
-
-        <div class="progress-bar" id="progress"></div>
+    <div class="section">
+        <div class="huge-text cyan">LCES</div>
+        <div class="big-text">Likeness Consent & Enforcement System</div>
+        <p class="subtitle">Cryptographic consent infrastructure for AI-generated likenesses. Provable. Revocable. Auditable.</p>
     </div>
 
-    <div class="controls">
-        <button id="restartBtn">RESTART</button>
-        <button id="pauseBtn">PAUSE</button>
+    <div class="section">
+        <div class="big-text">The Problem with <span class="red">AI Likenesses</span></div>
+        <p class="subtitle">Studios, platforms, and creators are generating synthetic voices and faces at scale — but consent is still handled with PDFs and prayers.</p>
+        <p class="subtitle" style="color:#ff4444;">When disputes happen, who has proof?</p>
     </div>
 
-    <script>
-        // Generate waveform
-        const waveform = document.getElementById('waveform1');
-        for (let i = 0; i < 40; i++) {
-            const bar = document.createElement('div');
-            bar.className = 'wave-bar';
-            bar.style.setProperty('--wave-height', (30 + Math.random() * 70) + 'px');
-            bar.style.animationDelay = (Math.random() * 0.5) + 's';
-            waveform.appendChild(bar);
-        }
+    <div class="section">
+        <div class="big-text cyan">How LCES Works</div>
+        <div class="workflow">
+            <div class="workflow-step">
+                <div class="workflow-num">1</div>
+                <div class="workflow-title">Capture</div>
+                <div class="workflow-desc">Identity + liveness + intent verification</div>
+            </div>
+            <div class="workflow-step">
+                <div class="workflow-num">2</div>
+                <div class="workflow-title">Sign</div>
+                <div class="workflow-desc">Cryptographic consent artifact created</div>
+            </div>
+            <div class="workflow-step">
+                <div class="workflow-num">3</div>
+                <div class="workflow-title">Anchor</div>
+                <div class="workflow-desc">Immutable record on-chain</div>
+            </div>
+            <div class="workflow-step">
+                <div class="workflow-num">4</div>
+                <div class="workflow-title">Enforce</div>
+                <div class="workflow-desc">Real-time policy + revocation</div>
+            </div>
+        </div>
+    </div>
 
-        // Scene management
-        const scenes = document.querySelectorAll('.scene');
-        const progressBar = document.getElementById('progress');
-        let currentScene = 0;
-        let isPaused = false;
-        let sceneTimeout;
+    <div class="section">
+        <div class="big-text">Core <span class="cyan">Capabilities</span></div>
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🔐</div>
+                <div class="feature-title">Cryptographic Consent</div>
+                <div class="feature-desc">Consent bound to identity, liveness, and intent. Not just a checkbox — a verifiable artifact.</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📜</div>
+                <div class="feature-title">Immutable Audit Trail</div>
+                <div class="feature-desc">Every consent, every generation, every usage event — logged with cryptographic receipts.</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-title">Fail-Closed Revocation</div>
+                <div class="feature-desc">When consent is revoked, downstream usage actually stops. Propagation acknowledgments ensure compliance.</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🔍</div>
+                <div class="feature-title">Offline Verification</div>
+                <div class="feature-desc">Auditors and partners can verify consent independently — no dependency on our systems.</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">💰</div>
+                <div class="feature-title">Revenue Share Rails</div>
+                <div class="feature-desc">Usage metering and billing linkage built in. Dispute-proof royalty tracking.</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🛡️</div>
+                <div class="feature-title">Hybrid PQC Signing</div>
+                <div class="feature-desc">Future-proof with post-quantum cryptography options for long-term audit validity.</div>
+            </div>
+        </div>
+    </div>
 
-        function showScene(index) {
-            scenes.forEach(s => s.classList.remove('active'));
-            if (index < scenes.length) {
-                scenes[index].classList.add('active');
-                const duration = parseInt(scenes[index].dataset.duration);
-                
-                progressBar.style.transition = 'none';
-                progressBar.style.width = '0%';
-                setTimeout(() => {
-                    progressBar.style.transition = `width ${duration}ms linear`;
-                    progressBar.style.width = '100%';
-                }, 10);
+    <div class="section">
+        <div class="big-text">Use Cases</div>
+        <div class="use-cases">
+            <div class="use-case">
+                <div class="use-case-icon">🎤</div>
+                <div class="use-case-title">Voice Cloning</div>
+            </div>
+            <div class="use-case">
+                <div class="use-case-icon">🎬</div>
+                <div class="use-case-title">Film & TV</div>
+            </div>
+            <div class="use-case">
+                <div class="use-case-icon">🎮</div>
+                <div class="use-case-title">Gaming</div>
+            </div>
+            <div class="use-case">
+                <div class="use-case-icon">📱</div>
+                <div class="use-case-title">Social Media</div>
+            </div>
+            <div class="use-case">
+                <div class="use-case-icon">🏛️</div>
+                <div class="use-case-title">Estate Licensing</div>
+            </div>
+        </div>
+    </div>
 
-                if (!isPaused) {
-                    sceneTimeout = setTimeout(() => {
-                        currentScene++;
-                        if (currentScene < scenes.length) {
-                            showScene(currentScene);
-                        } else {
-                            currentScene = 0;
-                            showScene(0);
-                        }
-                    }, duration);
-                }
-            }
-        }
+    <div class="section">
+        <div class="big-text green">Why It Matters</div>
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value">47</div>
+                <div class="stat-label">STATES WITH AI LIKENESS LAWS</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">$500M+</div>
+                <div class="stat-label">DEEPFAKE DAMAGES (2025)</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">0</div>
+                <div class="stat-label">CURRENT CONSENT STANDARDS</div>
+            </div>
+        </div>
+        <p class="subtitle">Regulation is coming. Be ready.</p>
+    </div>
 
-        document.getElementById('restartBtn').addEventListener('click', () => {
-            clearTimeout(sceneTimeout);
-            currentScene = 0;
-            isPaused = false;
-            document.getElementById('pauseBtn').textContent = 'PAUSE';
-            showScene(0);
-        });
+    <div class="section cta-section">
+        <div class="big-text">Consent Infrastructure</div>
+        <div class="big-text gold">That Actually Works.</div>
+        <p class="subtitle">SAG-AFTRA ready. Enterprise grade. Patent pending.</p>
+    </div>
 
-        document.getElementById('pauseBtn').addEventListener('click', () => {
-            isPaused = !isPaused;
-            document.getElementById('pauseBtn').textContent = isPaused ? 'PLAY' : 'PAUSE';
-            if (!isPaused) showScene(currentScene);
-            else clearTimeout(sceneTimeout);
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') {
-                clearTimeout(sceneTimeout);
-                currentScene = (currentScene + 1) % scenes.length;
-                showScene(currentScene);
-            } else if (e.key === 'ArrowLeft') {
-                clearTimeout(sceneTimeout);
-                currentScene = currentScene > 0 ? currentScene - 1 : scenes.length - 1;
-                showScene(currentScene);
-            } else if (e.key === ' ') {
-                e.preventDefault();
-                document.getElementById('pauseBtn').click();
-            }
-        });
-
-        showScene(0);
-    </script>
+    <div class="footer">
+        <p style="color:#ff4444;font-weight:700;">⚠️ PATENTS PENDING</p>
+        <p>© 2026 Final Boss Technology Inc.</p>
+    </div>
 </body>
 </html>
