@@ -53,7 +53,7 @@
             flex-direction: column; 
             justify-content: center; 
             align-items: center; 
-            opacity: 0; 
+            opacity: 1; 
             transition: opacity 1s ease-in-out;
             z-index: 10;
         }
@@ -161,7 +161,7 @@
             border-radius: 8px;
             text-align: center;
             animation: stepPop 0.5s ease forwards;
-            opacity: 0;
+            opacity: 1;
             transform: scale(0.8);
         }
 
@@ -287,7 +287,7 @@
             font-size: 24px;
             font-weight: 700;
             animation: resultPop 0.5s ease 2s forwards;
-            opacity: 0;
+            opacity: 1;
         }
 
         /* Scene 7: Audit Trail */
@@ -320,7 +320,7 @@
             display: flex;
             gap: 16px;
             animation: logEntry 0.3s ease forwards;
-            opacity: 0;
+            opacity: 1;
         }
 
         .audit-entry:nth-child(2) { animation-delay: 0.3s; }
@@ -375,7 +375,7 @@
 
         /* Animations */
         @keyframes glitchIn {
-            0% { opacity: 0; transform: translateX(-20px); filter: blur(10px); }
+            0% { opacity: 1; transform: translateX(-20px); filter: blur(10px); }
             50% { opacity: 1; transform: translateX(10px); }
             100% { transform: translateX(0); filter: blur(0); }
         }
@@ -391,7 +391,7 @@
         }
 
         @keyframes logoReveal {
-            0% { opacity: 0; transform: scale(0.5); filter: blur(20px); }
+            0% { opacity: 1; transform: scale(0.5); filter: blur(20px); }
             100% { opacity: 1; transform: scale(1); filter: blur(0); }
         }
 
