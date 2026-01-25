@@ -3,23 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LCES - Voice Consent Infrastructure for AI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>LCES for ElevenLabs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body { 
-            font-family: 'Montserrat', sans-serif; 
+            font-family: 'Inter', sans-serif; 
             background: #000; 
             color: #fff; 
             overflow: hidden; 
         }
 
-        .video-container { 
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        .demo-container { 
             width: 100vw; 
             height: 100vh; 
-            position: relative; 
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); 
+            position: relative;
+            background: radial-gradient(ellipse at center, #0a0a1a 0%, #000 100%);
         }
 
         .scene { 
@@ -32,218 +34,254 @@
             flex-direction: column; 
             justify-content: center; 
             align-items: center; 
-            opacity: 1; 
-            transition: opacity 1s; 
+            opacity: 0; 
+            transition: opacity 1s ease-in-out;
+            z-index: 10;
+            padding: 40px;
         }
 
         .scene.active { opacity: 1; }
 
-        /* Scene 1 - The Hook */
-        .scene-1 { background: radial-gradient(#0a1520 0%, #000 100%); }
-        .scene-1 .hook { 
-            font-size: 3vw; 
-            text-align: center; 
-            line-height: 1.6; 
-            color: #00d4ff; 
-            text-shadow: 0 0 30px rgba(0, 212, 255, 0.3); 
-            animation: fadeInUp 2s ease forwards; 
+        .cyber-text {
+            color: #00d4ff;
+            text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff;
         }
-        .scene-1 .hook .stat {
-            font-size: 8vw;
+
+        .warning-text {
+            color: #ff4444;
+            text-shadow: 0 0 10px #ff4444;
+        }
+
+        .success-text {
+            color: #00ff88;
+            text-shadow: 0 0 10px #00ff88;
+        }
+
+        /* Scene Specific */
+        .big-text {
+            font-size: 5vw;
             font-weight: 900;
-            display: block;
-            margin-bottom: 2vh;
+            text-align: center;
+            line-height: 1.2;
         }
 
-        /* Scene 2 - The Problem */
-        .scene-2 { background: #0a0a0a; }
-        .scene-2 .problem-text { 
-            font-size: 2.5vw; 
-            text-align: center; 
-            color: #888; 
-            max-width: 80%; 
-            line-height: 1.8; 
-        }
-        .scene-2 .highlight { color: #ff4444; font-weight: 700; }
-        .scene-2 .highlight-blue { color: #00d4ff; font-weight: 700; }
-
-        /* Scene 3 - The Reveal */
-        .scene-3 { background: #000; }
-        .logo { 
-            font-size: 10vw; 
-            font-weight: 900; 
-            letter-spacing: 0.2em; 
-            background: linear-gradient(135deg, #00d4ff 0%, #00ff88 50%, #00d4ff 100%); 
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent; 
-            animation: logoReveal 2s ease forwards; 
-            filter: drop-shadow(0 0 60px rgba(0, 212, 255, 0.5));
-        }
-        .tagline { 
-            font-size: 1.8vw; 
-            letter-spacing: 0.4em; 
-            color: #666; 
-            margin-top: 2vh; 
-            animation: fadeIn 2s ease 1s forwards; 
-            opacity: 1; 
+        .medium-text {
+            font-size: 2vw;
+            text-align: center;
+            color: #888;
+            margin-top: 24px;
         }
 
-        /* Scene 4 - The Solution */
-        .scene-4 { background: linear-gradient(#0a0a0a 0%, #0a1520 100%); }
-        .solution-flow {
+        .small-text {
+            font-size: 1.2vw;
+            color: #666;
+            margin-top: 16px;
+            letter-spacing: 0.2em;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            margin-top: 48px;
+        }
+
+        .stat-box {
+            padding: 32px;
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            border-radius: 8px;
+            text-align: center;
+            animation: statPop 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        .stat-box:nth-child(1) { animation-delay: 0.2s; }
+        .stat-box:nth-child(2) { animation-delay: 0.4s; }
+        .stat-box:nth-child(3) { animation-delay: 0.6s; }
+
+        .stat-value {
+            font-size: 48px;
+            font-weight: 900;
+            color: #ff4444;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #888;
+            margin-top: 8px;
+            letter-spacing: 0.1em;
+        }
+
+        /* Problem List */
+        .problem-list {
+            max-width: 800px;
+            margin-top: 48px;
+        }
+
+        .problem-item {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 3vw;
+            gap: 16px;
+            padding: 20px;
+            background: rgba(255, 68, 68, 0.1);
+            border-left: 4px solid #ff4444;
+            margin-bottom: 16px;
+            animation: slideIn 0.5s ease forwards;
+            opacity: 0;
+            transform: translateX(-20px);
         }
-        .flow-step {
-            text-align: center;
-            animation: cardSlide 0.8s ease forwards;
-            opacity: 1;
-            transform: translateY(50px);
-        }
-        .flow-step:nth-child(1) { animation-delay: 0.2s; }
-        .flow-step:nth-child(2) { animation-delay: 0.5s; }
-        .flow-step:nth-child(3) { animation-delay: 0.8s; }
-        .flow-step:nth-child(4) { animation-delay: 1.1s; }
-        .flow-step:nth-child(5) { animation-delay: 1.4s; }
-        .flow-icon {
-            font-size: 4vw;
-            margin-bottom: 1vh;
-        }
-        .flow-step h3 { color: #00d4ff; font-size: 1.2vw; margin-bottom: 0.5vh; }
-        .flow-step p { color: #666; font-size: 0.9vw; max-width: 12vw; }
-        .flow-arrow { font-size: 2vw; color: #333; }
 
-        /* Scene 5 - The Code */
-        .scene-5 { background: #0a0a0a; }
-        .code-block {
-            background: #111;
-            border: 1px solid #333;
-            border-radius: 1vw;
-            padding: 3vw;
-            font-family: 'Monaco', 'Consolas', monospace;
-            font-size: 1.2vw;
-            text-align: left;
-            max-width: 70%;
-            animation: fadeInUp 1s ease forwards;
+        .problem-item:nth-child(1) { animation-delay: 0.2s; }
+        .problem-item:nth-child(2) { animation-delay: 0.4s; }
+        .problem-item:nth-child(3) { animation-delay: 0.6s; }
+        .problem-item:nth-child(4) { animation-delay: 0.8s; }
+
+        .problem-icon {
+            font-size: 32px;
         }
+
+        .problem-text {
+            font-size: 18px;
+        }
+
+        /* Solution List */
+        .solution-list {
+            max-width: 800px;
+            margin-top: 48px;
+        }
+
+        .solution-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 4px solid #00ff88;
+            margin-bottom: 16px;
+            animation: slideIn 0.5s ease forwards;
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+
+        .solution-item:nth-child(1) { animation-delay: 0.2s; }
+        .solution-item:nth-child(2) { animation-delay: 0.4s; }
+        .solution-item:nth-child(3) { animation-delay: 0.6s; }
+        .solution-item:nth-child(4) { animation-delay: 0.8s; }
+
+        .solution-icon {
+            font-size: 32px;
+        }
+
+        .solution-text {
+            font-size: 18px;
+        }
+
+        /* Comparison Table */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            max-width: 900px;
+            margin-top: 48px;
+        }
+
+        .compare-box {
+            padding: 32px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .compare-box.without {
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+        }
+
+        .compare-box.with {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .compare-title {
+            font-size: 14px;
+            letter-spacing: 0.2em;
+            margin-bottom: 24px;
+        }
+
+        .compare-list {
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .compare-list div {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Integration */
+        .integration-visual {
+            text-align: center;
+        }
+
+        .code-block {
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            text-align: left;
+            max-width: 600px;
+            margin: 32px auto;
+        }
+
         .code-comment { color: #666; }
         .code-keyword { color: #ff79c6; }
         .code-string { color: #f1fa8c; }
-        .code-function { color: #50fa7b; }
-        .code-var { color: #8be9fd; }
-        .code-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.5vw;
+        .code-func { color: #00d4ff; }
+
+        /* CTA */
+        .cta-button {
+            display: inline-block;
+            padding: 20px 48px;
+            background: linear-gradient(135deg, #00d4ff, #00ff88);
+            color: #000;
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: 0.1em;
+            border: none;
+            cursor: pointer;
+            margin-top: 32px;
+            animation: ctaPulse 2s ease-in-out infinite;
+        }
+
+        /* Animations */
+        @keyframes statPop {
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes ctaPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.8); }
+        }
+
+        /* Scene Label */
+        .scene-label {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
             color: #00d4ff;
-            margin-bottom: 2vh;
-            letter-spacing: 0.2em;
-        }
-
-        /* Scene 6 - Benefits */
-        .scene-6 { background: linear-gradient(#0a0a0a 0%, #151515 100%); }
-        .benefits-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 3vw; 
-            max-width: 80%; 
-        }
-        .benefit-card { 
-            background: rgba(0, 212, 255, 0.05); 
-            border: 1px solid rgba(0, 212, 255, 0.2); 
-            padding: 2.5vw; 
-            border-radius: 1vw; 
-            animation: cardSlide 0.8s ease forwards; 
-            opacity: 1; 
-            transform: translateY(50px);
-            text-align: center;
-        }
-        .benefit-card:nth-child(1) { animation-delay: 0.2s; }
-        .benefit-card:nth-child(2) { animation-delay: 0.4s; }
-        .benefit-card:nth-child(3) { animation-delay: 0.6s; }
-        .benefit-card .icon { font-size: 3vw; margin-bottom: 1.5vh; }
-        .benefit-card h3 { color: #00d4ff; font-size: 1.3vw; margin-bottom: 1vh; }
-        .benefit-card p { color: #888; font-size: 1vw; }
-
-        /* Scene 7 - Stats */
-        .scene-7 { background: radial-gradient(#0a1520 0%, #000 100%); }
-        .stats-row {
-            display: flex;
-            gap: 8vw;
-            text-align: center;
-        }
-        .stat-item {
-            animation: fadeInUp 0.8s ease forwards;
-            opacity: 1;
-        }
-        .stat-item:nth-child(1) { animation-delay: 0.2s; }
-        .stat-item:nth-child(2) { animation-delay: 0.4s; }
-        .stat-item:nth-child(3) { animation-delay: 0.6s; }
-        .stat-number {
-            font-size: 5vw;
-            font-weight: 900;
-            color: #00d4ff;
-            text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
-        }
-        .stat-label {
-            font-size: 1vw;
-            color: #666;
-            letter-spacing: 0.2em;
-            margin-top: 1vh;
-        }
-
-        /* Scene 8 - The Close */
-        .scene-8 { background: #000; }
-        .final-message { text-align: center; }
-        .main-cta { 
-            font-size: 6vw; 
-            font-weight: 900; 
-            background: linear-gradient(135deg, #00d4ff 0%, #00ff88 50%, #00d4ff 100%); 
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent; 
-            animation: breathe 3s ease infinite; 
-        }
-        .sub-message { font-size: 1.5vw; color: #666; margin-top: 3vh; letter-spacing: 0.2em; }
-        .cta-button { 
-            margin-top: 5vh; 
-            padding: 2vh 4vw; 
-            background: linear-gradient(135deg, #00d4ff 0%, #00aa88 100%); 
-            border: none; 
-            border-radius: 0.5vw; 
-            font-size: 1.5vw; 
-            font-weight: 700; 
-            color: #000; 
-            cursor: pointer; 
-            animation: glow 2s ease infinite; 
-        }
-        .partner-logos {
-            margin-top: 5vh;
-            font-size: 1vw;
-            color: #444;
-            letter-spacing: 0.3em;
-        }
-
-        /* Particles */
-        .particles { 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            pointer-events: none; 
-            overflow: hidden; 
-        }
-        .particle { 
-            position: absolute; 
-            width: 4px; 
-            height: 4px; 
-            background: #00d4ff; 
-            border-radius: 50%; 
-            opacity: 0.3; 
-            animation: float 10s ease infinite; 
+            letter-spacing: 0.4em;
+            font-family: 'JetBrains Mono', monospace;
         }
 
         /* Progress Bar */
@@ -251,10 +289,11 @@
             position: fixed; 
             bottom: 0; 
             left: 0; 
-            height: 4px; 
+            height: 3px; 
             background: linear-gradient(90deg, #00d4ff, #00ff88); 
             width: 0%; 
-            transition: width 0.1s linear; 
+            transition: width 0.1s linear;
+            z-index: 100;
         }
 
         /* Controls */
@@ -267,196 +306,197 @@
             z-index: 1000; 
         }
         .controls button { 
-            padding: 10px 20px; 
-            background: rgba(0, 212, 255, 0.2); 
-            border: 1px solid #00d4ff; 
+            padding: 8px 16px; 
+            background: rgba(0, 212, 255, 0.1); 
+            border: 1px solid rgba(0, 212, 255, 0.3); 
             color: #00d4ff; 
             cursor: pointer; 
-            font-family: 'Montserrat', sans-serif; 
-            font-weight: 700; 
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            font-family: 'JetBrains Mono', monospace;
             transition: all 0.3s;
         }
         .controls button:hover { 
             background: #00d4ff; 
             color: #000; 
         }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            0% { opacity: 1; transform: translateY(30px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeIn {
-            0% { opacity: 1; }
-            100% { opacity: 1; }
-        }
-
-        @keyframes logoReveal {
-            0% { opacity: 1; transform: scale(0.8); filter: blur(20px); }
-            100% { opacity: 1; transform: scale(1); filter: blur(0); }
-        }
-
-        @keyframes cardSlide {
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes breathe {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.5); }
-            50% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.8); }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
-            10% { opacity: 0.3; }
-            90% { opacity: 0.3; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 1; }
-        }
     </style>
 </head>
 <body>
-    <div class="video-container">
-        <div class="particles" id="particles"></div>
+    <div class="demo-container">
 
-        <!-- Scene 1: The Hook -->
-        <div class="scene scene-1 active" data-duration="5000">
-            <div class="hook">
-                <span class="stat">15M+</span>
-                voices cloned without consent last year.
-            </div>
-        </div>
-
-        <!-- Scene 2: The Problem -->
-        <div class="scene scene-2" data-duration="7000">
-            <div class="problem-text">
-                Voice AI is <span class="highlight-blue">the fastest growing market in tech.</span><br><br>
-                But there's no infrastructure for <span class="highlight">consent.</span><br><br>
-                No way to prove permission. No way to track usage.<br>
-                No way to <span class="highlight">pay the voice owner.</span><br><br>
-                <em style="color: #00d4ff;">Until now.</em>
-            </div>
-        </div>
-
-        <!-- Scene 3: The Reveal -->
-        <div class="scene scene-3" data-duration="5000">
-            <div class="logo">LCES</div>
-            <div class="tagline">LIKENESS CONSENT & ENFORCEMENT SYSTEM</div>
-        </div>
-
-        <!-- Scene 4: The Solution Flow -->
-        <div class="scene scene-4" data-duration="8000">
-            <div class="solution-flow">
-                <div class="flow-step">
-                    <div class="flow-icon">🎤</div>
-                    <h3>REGISTER</h3>
-                    <p>Voice owner uploads sample</p>
-                </div>
-                <div class="flow-arrow">→</div>
-                <div class="flow-step">
-                    <div class="flow-icon">✅</div>
-                    <h3>CONSENT</h3>
-                    <p>Grant permission to platforms</p>
-                </div>
-                <div class="flow-arrow">→</div>
-                <div class="flow-step">
-                    <div class="flow-icon">⛓️</div>
-                    <h3>VERIFY</h3>
-                    <p>On-chain proof of consent</p>
-                </div>
-                <div class="flow-arrow">→</div>
-                <div class="flow-step">
-                    <div class="flow-icon">💰</div>
-                    <h3>EARN</h3>
-                    <p>Automatic royalty payments</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Scene 5: The Code -->
-        <div class="scene scene-5" data-duration="8000">
-            <div class="code-title">// YOUR INTEGRATION</div>
-            <div class="code-block">
-                <span class="code-comment">// Before cloning a voice</span><br>
-                <span class="code-keyword">const</span> <span class="code-var">consent</span> = <span class="code-keyword">await</span> <span class="code-function">lces.checkConsent</span>({<br>
-                &nbsp;&nbsp;<span class="code-var">voiceHash</span>: <span class="code-string">"0x7f83b..."</span>,<br>
-                &nbsp;&nbsp;<span class="code-var">licensee</span>: <span class="code-string">"elevenlabs.io"</span>,<br>
-                &nbsp;&nbsp;<span class="code-var">purpose</span>: <span class="code-string">"VOICE_SYNTHESIS"</span><br>
-                });<br><br>
-                <span class="code-keyword">if</span> (<span class="code-var">consent</span>.<span class="code-var">allowed</span>) {<br>
-                &nbsp;&nbsp;<span class="code-comment">// ✓ Clone voice</span><br>
-                &nbsp;&nbsp;<span class="code-comment">// ✓ Royalty auto-paid to owner</span><br>
-                } <span class="code-keyword">else</span> {<br>
-                &nbsp;&nbsp;<span class="code-comment">// ✗ Prompt user for permission</span><br>
-                }
-            </div>
-        </div>
-
-        <!-- Scene 6: Benefits -->
-        <div class="scene scene-6" data-duration="7000">
-            <div class="benefits-grid">
-                <div class="benefit-card">
-                    <div class="icon">⚖️</div>
-                    <h3>LEGAL SHIELD</h3>
-                    <p>Immutable proof of consent. No more lawsuits.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="icon">🏢</div>
-                    <h3>ENTERPRISE READY</h3>
-                    <p>SOC2 compliant. Studio-grade audit trails.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="icon">💎</div>
-                    <h3>NEW REVENUE</h3>
-                    <p>Unlock premium voices with automated royalties.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Scene 7: Stats -->
-        <div class="scene scene-7" data-duration="6000">
-            <div class="stats-row">
-                <div class="stat-item">
-                    <div class="stat-number">132</div>
-                    <div class="stat-label">PASSING TESTS</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">&lt;50ms</div>
-                    <div class="stat-label">CONSENT LOOKUP</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">3</div>
-                    <div class="stat-label">SMART CONTRACTS</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Scene 8: The Close -->
-        <div class="scene scene-8" data-duration="10000">
-            <div class="final-message">
-                <div class="main-cta">OWN THE LAYER.</div>
-                <div class="sub-message">BE THE CONSENT INFRASTRUCTURE FOR VOICE AI</div>
-                <button class="cta-button" onclick="window.location.href='mailto:abraham@finalbosstech.com?subject=LCES%20Licensing%20Inquiry'">REQUEST DEMO</button>
-                <div class="partner-logos">PATENT PENDING · USPTO FILED · PRODUCTION READY</div>
-            </div>
-        </div>
-
-        <div class="progress-bar" id="progress"></div>
-        
-        <!-- PATENT WATERMARK - Always Visible -->
+        <!-- PATENTS PENDING WATERMARK -->
         <div style="position: fixed; top: 20px; left: 20px; z-index: 999; font-size: 13px; font-family: monospace; letter-spacing: 0.15em; color: #ff0000; text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000; font-weight: bold;">
             ⚠️ PATENTS PENDING
         </div>
         <div style="position: fixed; top: 20px; right: 20px; z-index: 999; font-size: 11px; font-family: monospace; letter-spacing: 0.1em; color: #00d4ff; text-shadow: 0 0 5px rgba(0,212,255,0.5);">
-            USPTO FILED • FINAL BOSS TECHNOLOGY INC.
+            FINAL BOSS TECHNOLOGY INC.
         </div>
         <div style="position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); z-index: 999; font-size: 10px; font-family: monospace; letter-spacing: 0.2em; color: #ff0000; text-shadow: 0 0 10px #ff0000; text-align: center; background: rgba(0,0,0,0.7); padding: 8px 16px; border: 1px solid #ff0000;">
             ⚠️ PATENTS PENDING • FINAL BOSS TECHNOLOGY INC. ⚠️
         </div>
+
+        <!-- Scene 1: Hook -->
+        <div class="scene active" data-duration="5000">
+            <div class="big-text">
+                <span style="color: #fff;">ElevenLabs is</span><br>
+                <span class="cyber-text">THE BEST</span><br>
+                <span style="color: #fff;">voice cloning platform.</span>
+            </div>
+            <div class="medium-text">But there's a problem.</div>
+        </div>
+
+        <!-- Scene 2: The Stats -->
+        <div class="scene" data-duration="6000">
+            <div class="scene-label">THE RISK</div>
+            <div class="big-text" style="font-size: 3vw;">
+                <span class="warning-text">Every cloned voice</span><br>
+                <span style="color: #fff;">is a potential lawsuit.</span>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value">$500M+</div>
+                    <div class="stat-label">DEEPFAKE DAMAGES (2025)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">47</div>
+                    <div class="stat-label">STATES WITH AI LAWS</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">∞</div>
+                    <div class="stat-label">REPUTATION RISK</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 3: The Problems -->
+        <div class="scene" data-duration="7000">
+            <div class="scene-label">YOUR CHALLENGES</div>
+            <div class="big-text" style="font-size: 2.5vw;">
+                <span class="warning-text">Without consent infrastructure:</span>
+            </div>
+            <div class="problem-list">
+                <div class="problem-item">
+                    <div class="problem-icon">⚖️</div>
+                    <div class="problem-text">No proof of consent if sued by voice owners</div>
+                </div>
+                <div class="problem-item">
+                    <div class="problem-icon">🏢</div>
+                    <div class="problem-text">Enterprise clients won't adopt without compliance</div>
+                </div>
+                <div class="problem-item">
+                    <div class="problem-icon">🔓</div>
+                    <div class="problem-text">Can't detect when clones are misused</div>
+                </div>
+                <div class="problem-item">
+                    <div class="problem-icon">📋</div>
+                    <div class="problem-text">No audit trail for regulators</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 4: LCES Solution -->
+        <div class="scene" data-duration="5000">
+            <div class="scene-label">THE SOLUTION</div>
+            <div style="font-size: 10vw; font-weight: 900;" class="cyber-text">LCES</div>
+            <div class="medium-text" style="color: #fff;">Likeness Consent & Enforcement System</div>
+            <div class="small-text">THE CONSENT LAYER YOUR PLATFORM NEEDS</div>
+        </div>
+
+        <!-- Scene 5: What You Get -->
+        <div class="scene" data-duration="7000">
+            <div class="scene-label">WHAT YOU GET</div>
+            <div class="big-text" style="font-size: 2.5vw;">
+                <span class="success-text">With LCES integrated:</span>
+            </div>
+            <div class="solution-list">
+                <div class="solution-item">
+                    <div class="solution-icon">🔐</div>
+                    <div class="solution-text">Cryptographic proof of consent for every voice</div>
+                </div>
+                <div class="solution-item">
+                    <div class="solution-icon">🔍</div>
+                    <div class="solution-text">Real-time detection of unauthorized clones</div>
+                </div>
+                <div class="solution-item">
+                    <div class="solution-icon">📜</div>
+                    <div class="solution-text">Immutable audit trail for compliance</div>
+                </div>
+                <div class="solution-item">
+                    <div class="solution-icon">🏆</div>
+                    <div class="solution-text">Enterprise-ready consent infrastructure</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 6: Before/After -->
+        <div class="scene" data-duration="7000">
+            <div class="scene-label">THE DIFFERENCE</div>
+            <div class="comparison">
+                <div class="compare-box without">
+                    <div class="compare-title warning-text">❌ WITHOUT LCES</div>
+                    <div class="compare-list">
+                        <div><span style="color: #ff4444;">✗</span> Hope users consented</div>
+                        <div><span style="color: #ff4444;">✗</span> No misuse detection</div>
+                        <div><span style="color: #ff4444;">✗</span> Liability on you</div>
+                        <div><span style="color: #ff4444;">✗</span> Enterprise won't touch it</div>
+                        <div><span style="color: #ff4444;">✗</span> Regulators asking questions</div>
+                    </div>
+                </div>
+                <div class="compare-box with">
+                    <div class="compare-title success-text">✓ WITH LCES</div>
+                    <div class="compare-list">
+                        <div><span style="color: #00ff88;">✓</span> Verified consent on-chain</div>
+                        <div><span style="color: #00ff88;">✓</span> Real-time violation alerts</div>
+                        <div><span style="color: #00ff88;">✓</span> Protected from liability</div>
+                        <div><span style="color: #00ff88;">✓</span> Enterprise clients onboard</div>
+                        <div><span style="color: #00ff88;">✓</span> Compliance documentation</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 7: Integration -->
+        <div class="scene" data-duration="6000">
+            <div class="scene-label">EASY INTEGRATION</div>
+            <div class="integration-visual">
+                <div class="big-text" style="font-size: 2vw;">
+                    One API call. Full protection.
+                </div>
+                <div class="code-block">
+                    <div><span class="code-comment">// Before cloning a voice</span></div>
+                    <div><span class="code-keyword">const</span> consent = <span class="code-keyword">await</span> <span class="code-func">lces.verify</span>({</div>
+                    <div>&nbsp;&nbsp;voiceId: <span class="code-string">"voice_abc123"</span>,</div>
+                    <div>&nbsp;&nbsp;userId: <span class="code-string">"user_xyz789"</span>,</div>
+                    <div>&nbsp;&nbsp;useCase: <span class="code-string">"commercial"</span></div>
+                    <div>});</div>
+                    <div></div>
+                    <div><span class="code-keyword">if</span> (consent.verified) {</div>
+                    <div>&nbsp;&nbsp;<span class="code-comment">// ✓ Proceed with cloning</span></div>
+                    <div>&nbsp;&nbsp;<span class="code-comment">// ✓ Audit logged on-chain</span></div>
+                    <div>}</div>
+                </div>
+                <div class="small-text">SDK AVAILABLE: JavaScript • Python • Go • REST API</div>
+            </div>
+        </div>
+
+        <!-- Scene 8: CTA -->
+        <div class="scene" data-duration="6000">
+            <div class="scene-label">LET'S TALK</div>
+            <div class="big-text">
+                <span style="color: #fff;">Make ElevenLabs</span><br>
+                <span class="success-text">lawsuit-proof.</span>
+            </div>
+            <div class="medium-text" style="color: #666;">
+                Consent infrastructure that scales with you.
+            </div>
+            <button class="cta-button">SCHEDULE A DEMO</button>
+            <div style="margin-top: 24px; font-size: 12px; color: #ff0000; text-shadow: 0 0 10px #ff0000;">
+                ⚠️ PATENTS PENDING • FINAL BOSS TECHNOLOGY INC.
+            </div>
+        </div>
+
+        <div class="progress-bar" id="progress"></div>
     </div>
 
     <div class="controls">
@@ -465,18 +505,6 @@
     </div>
 
     <script>
-        // Generate particles
-        const particlesContainer = document.getElementById('particles');
-        for (let i = 0; i < 30; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 10 + 's';
-            particle.style.animationDuration = (8 + Math.random() * 6) + 's';
-            particlesContainer.appendChild(particle);
-        }
-
-        // Scene management
         const scenes = document.querySelectorAll('.scene');
         const progressBar = document.getElementById('progress');
         let currentScene = 0;
@@ -489,7 +517,6 @@
                 scenes[index].classList.add('active');
                 const duration = parseInt(scenes[index].dataset.duration);
                 
-                // Progress bar
                 progressBar.style.transition = 'none';
                 progressBar.style.width = '0%';
                 setTimeout(() => {
@@ -511,7 +538,6 @@
             }
         }
 
-        // Controls
         document.getElementById('restartBtn').addEventListener('click', () => {
             clearTimeout(sceneTimeout);
             currentScene = 0;
@@ -523,14 +549,10 @@
         document.getElementById('pauseBtn').addEventListener('click', () => {
             isPaused = !isPaused;
             document.getElementById('pauseBtn').textContent = isPaused ? 'PLAY' : 'PAUSE';
-            if (!isPaused) {
-                showScene(currentScene);
-            } else {
-                clearTimeout(sceneTimeout);
-            }
+            if (!isPaused) showScene(currentScene);
+            else clearTimeout(sceneTimeout);
         });
 
-        // Keyboard controls
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight') {
                 clearTimeout(sceneTimeout);
@@ -541,13 +563,12 @@
                 currentScene = currentScene > 0 ? currentScene - 1 : scenes.length - 1;
                 showScene(currentScene);
             } else if (e.key === ' ') {
+                e.preventDefault();
                 document.getElementById('pauseBtn').click();
             }
         });
 
-        // Start
         showScene(0);
     </script>
 </body>
 </html>
-<!-- cache bust Sat Jan 24 23:49:06 PST 2026 -->
