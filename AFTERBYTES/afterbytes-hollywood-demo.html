@@ -31,7 +31,7 @@
             flex-direction: column; 
             justify-content: center; 
             align-items: center; 
-            opacity: 0; 
+            opacity: 1; 
             transition: opacity 1s ease-in-out; 
         }
 
@@ -56,7 +56,7 @@
             cursor: pointer;
             transition: all 0.4s;
             animation: cardReveal 0.6s ease forwards;
-            opacity: 0;
+            opacity: 1;
             transform: scale(0.9);
         }
         
@@ -226,7 +226,7 @@
             letter-spacing: 0.5em;
             margin-top: 16px;
             animation: subtitleReveal 2s ease 0.5s forwards;
-            opacity: 0;
+            opacity: 1;
         }
         
         .hero-tagline {
@@ -234,7 +234,7 @@
             color: #666;
             margin-top: 24px;
             animation: fadeIn 2s ease 1s forwards;
-            opacity: 0;
+            opacity: 1;
         }
 
         /* Scene 3: Effects Panel */
@@ -275,7 +275,7 @@
             cursor: pointer;
             transition: all 0.3s;
             animation: effectPop 0.5s ease forwards;
-            opacity: 0;
+            opacity: 1;
             transform: translateY(20px);
         }
         
@@ -334,7 +334,7 @@
             cursor: pointer;
             transition: all 0.3s;
             animation: trackSlide 0.5s ease forwards;
-            opacity: 0;
+            opacity: 1;
             transform: translateX(-20px);
         }
         
@@ -505,12 +505,12 @@
         }
         
         @keyframes titleReveal {
-            0% { opacity: 0; transform: scale(1.2); filter: blur(20px); }
+            0% { opacity: 1; transform: scale(1.2); filter: blur(20px); }
             100% { opacity: 1; transform: scale(1); filter: blur(0); }
         }
         
         @keyframes subtitleReveal {
-            0% { opacity: 0; transform: translateY(20px); }
+            0% { opacity: 1; transform: translateY(20px); }
             100% { opacity: 1; transform: translateY(0); }
         }
         

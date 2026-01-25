@@ -48,7 +48,7 @@
             flex-direction: column; 
             justify-content: center; 
             align-items: center; 
-            opacity: 0; 
+            opacity: 1; 
             transition: opacity 1s; 
         }
 
@@ -95,7 +95,7 @@
             color: #666; 
             margin-top: 2vh; 
             animation: fadeIn 2s ease 1s forwards; 
-            opacity: 0; 
+            opacity: 1; 
         }
 
         /* Scene 4 - Features */
@@ -112,7 +112,7 @@
             padding: 3vw; 
             border-radius: 1vw; 
             animation: cardSlide 0.8s ease forwards; 
-            opacity: 0; 
+            opacity: 1; 
             transform: translateY(50px); 
         }
         .feature-card:nth-child(1) { animation-delay: 0.2s; }
@@ -213,17 +213,17 @@
 
         /* Animations */
         @keyframes fadeInUp {
-            0% { opacity: 0; transform: translateY(30px); }
+            0% { opacity: 1; transform: translateY(30px); }
             100% { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes fadeIn {
-            0% { opacity: 0; }
+            0% { opacity: 1; }
             100% { opacity: 1; }
         }
 
         @keyframes logoReveal {
-            0% { opacity: 0; transform: scale(0.8); filter: blur(20px); }
+            0% { opacity: 1; transform: scale(0.8); filter: blur(20px); }
             100% { opacity: 1; transform: scale(1); filter: blur(0); }
         }
 
@@ -247,10 +247,10 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
             10% { opacity: 0.3; }
             90% { opacity: 0.3; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 1; }
         }
     </style>
 </head>
