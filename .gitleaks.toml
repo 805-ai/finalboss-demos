@@ -3,19 +3,19 @@ title = "FinalBossTech gitleaks baseline"
 [allowlist]
 description = "Allowlisted patterns (examples + tests only)"
 regexes = [
-  "your_.*_here",
-  "changeme",
-  "example",
-  "dummy",
-  "not_production",
-  "test_secret",
-  "DO_NOT_USE_REPLACE_ME"
+  'your_.*_here',
+  'changeme',
+  'example',
+  'dummy',
+  'not_production',
+  'test_secret',
+  'DO_NOT_USE_REPLACE_ME'
 ]
 paths = [
-  ".*\.md$",
-  ".*\.txt$",
-  ".*/examples/.*",
-  ".*/test.*/.*"
+  '.*\.md$',
+  '.*\.txt$',
+  '.*/examples/.*',
+  '.*/test.*/.*'
 ]
 
 [extend]
