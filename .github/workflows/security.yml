@@ -6,34 +6,55 @@ on:
   pull_request:
     branches: [ "main", "master" ]
   workflow_dispatch:
+  schedule:
+    - cron: "0 9 * * 1"  # weekly full scan (Mon 09:00 UTC)
 
 permissions:
   contents: read
-  pull-requests: read
 
 concurrency:
   group: security-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  gitleaks:
-    name: Secrets Scan (gitleaks)
+  gitleaks_pr:
+    name: Secrets Scan (gitleaks) - working tree only
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Run gitleaks
+      - name: Run gitleaks (no git history)
         uses: gitleaks/gitleaks-action@v2
         with:
           config: .gitleaks.toml
+          args: --no-git --redact
+
+  gitleaks_history:
+    name: Secrets Scan (gitleaks) - full history (scheduled)
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout (full history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Run gitleaks (history)
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          config: .gitleaks.toml
+          args: --redact --report-format json --report-path gitleaks-report.json
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitleaks-report
+          path: gitleaks-report.json
 
   dependency-review:
     name: Dependency Review (PR only)
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
       - name: Dependency Review
         uses: actions/dependency-review-action@v4
 
@@ -51,11 +72,11 @@ jobs:
       - name: Install pip-audit
         if: ${{ hashFiles('requirements.txt', 'requirements.in', 'pyproject.toml') != '' }}
         run: python -m pip install --upgrade pip pip-audit
-      - name: Run pip-audit
+      - name: Run pip-audit (high severity)
         if: ${{ hashFiles('requirements.txt', 'requirements.in', 'pyproject.toml') != '' }}
         run: |
-          if [ -f requirements.txt ]; then pip-audit -r requirements.txt; fi
-          if [ -f requirements.in ]; then pip-audit -r requirements.in; fi
+          if [ -f requirements.txt ]; then pip-audit -r requirements.txt --severity high; fi
+          if [ -f requirements.in ]; then pip-audit -r requirements.in --severity high; fi
 
   node-audit:
     name: Node audit (npm) if package-lock exists
@@ -68,7 +89,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - name: npm audit
+      - name: npm audit (high)
         if: ${{ hashFiles('package-lock.json', 'package.json') != '' }}
         run: |
           npm ci
