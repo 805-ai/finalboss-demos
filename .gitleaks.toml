@@ -9,15 +9,13 @@ regexes = [
   "dummy",
   "not_production",
   "test_secret",
-  "x\*40",
-  "y\*40"
+  "DO_NOT_USE_REPLACE_ME"
 ]
 paths = [
-  ".*\\.md$",
-  ".*\\.txt$",
-  ".*examples/.*",
-  ".*test.*",
-  ".*tests/.*"
+  ".*\.md$",
+  ".*\.txt$",
+  ".*/examples/.*",
+  ".*/test.*/.*"
 ]
 
 [extend]
